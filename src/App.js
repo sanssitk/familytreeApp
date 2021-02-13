@@ -1,11 +1,19 @@
 import "./App.css";
-import FaceBookSignIn from "./Provider/FaceBookSignIn";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Home from "./Routes/HomePage/Home";
+import NewFamilyForm from "./Routes/AddFamily/NewFamilyForm";
 
 function App() {
   return (
-    <div className="app">
-      <FaceBookSignIn />
-    </div>
+    <Router>
+      <div className="app">
+        <Switch>
+          <Route exact path="/addmember" component={NewFamilyForm} />
+
+          <Route path="/" component={Home} />
+        </Switch>
+      </div>
+    </Router>
   );
 }
 

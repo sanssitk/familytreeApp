@@ -1,18 +1,21 @@
-// intital user
+// intital data
+
 export const initialState = {
   user: null,
+  uid: null,
 };
 
-const user = (state, action) => {
+const reducer = (state, action) => {
   switch (action.type) {
     case "SET_USER":
       return {
         ...state,
         user: action.user,
+        uid: action.uid,
       };
     default:
       return state;
   }
 };
 
-export default user;
+export default reducer;

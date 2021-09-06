@@ -1,20 +1,58 @@
 import "./App.css";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Home from "./Routes/HomePage/Home";
-import NewFamilyForm from "./Routes/AddFamily/NewFamilyForm";
+import { useEffect } from "react";
+import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
+import { useStateValue } from "./StateManagement/StateProvider";
+import { auth } from "./Provider/firebase";
 
-function App() {
+import LandingPage from "./Components/LandingPage/LandingPage";
+import Home from "./Components/Home/Home";
+
+const App = () => {
+  const [{ user, uid }, dispatch] = useStateValue();
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        // the user is logged in......
+        dispatch({
+          type: "SET_USER",
+          user: user,
+          uid: user.uid,
+        });
+      } else {
+        // user is logged out......
+        dispatch({
+          type: "SET_USER",
+          user: null,
+          uid: null,
+        });
+      }
+    });
+
+    return () => {
+      // Any cleanup operations go here if refreshed
+      unsubscribe();
+    };
+  }, []);
+
   return (
     <Router>
       <div className="app">
         <Switch>
-          <Route exact path="/addmember" component={NewFamilyForm} />
-
-          <Route path="/" component={Home} />
+          <Route path="/" exact>
+            <LandingPage />
+          </Route>
+          {user ? (
+            <Route path={`/home/${user.displayName.split(" ")[0]}=${uid}`}>
+              <Home />
+            </Route>
+          ) : (
+            ""
+          )}
         </Switch>
       </div>
     </Router>
   );
-}
+};
 
 export default App;

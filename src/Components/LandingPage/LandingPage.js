@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import FbButton from "../FbButton";
 import { facebookProvider, auth } from "../../Provider/firebase";
 import { useStateValue } from "../../StateManagement/StateProvider";
@@ -7,6 +7,12 @@ import { useHistory } from "react-router-dom";
 function LandingPage() {
   const history = useHistory();
   const [{ user }, dispatch] = useStateValue();
+
+  useEffect(() => {
+    if (user) {
+      signIn(user);
+    }
+  }, [user]);
 
   const signIn = (user) => {
     if (user) {

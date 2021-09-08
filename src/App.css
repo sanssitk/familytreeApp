@@ -4,6 +4,10 @@
     box-sizing: border-box;
 }
 
+.familytree {
+    height: 100vh;
+}
+
 .landingPage {
     display: flex;
     flex-direction: column;

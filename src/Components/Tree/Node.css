@@ -1,0 +1,29 @@
+.nodeMain {
+    background-color: white;
+    border: 3px solid #0093FF;
+    border-radius: 5px;
+    display: flex;
+    padding: 8px;
+}
+
+.nodeImage {
+    flex: 0.25;
+    background-color: goldenrod;
+    background-image: url("https://scontent-dfw5-2.xx.fbcdn.net/v/t1.6435-9/184445149_3764362166994878_1464015361066101685_n.jpg?_nc_cat=107&ccb=1-5&_nc_sid=8bfeb9&_nc_ohc=tnpD9aU9Y4oAX-s11An&_nc_ht=scontent-dfw5-2.xx&oh=4a907019f3dd242753152eee3237bab5&oe=615D966E");
+    background-position: center center;
+    background-size: cover;
+}
+
+.nodeInfo {
+    flex: 0.7;
+    margin-left: 8px;
+}
+
+.nodeInfo>* {
+    margin: 0;
+    padding: 0;
+}
+
+/* LightBlue : #DCF2FF */
+/* DarkBlue : #419FD8 */
+/* BrightBlue : #0093FF */

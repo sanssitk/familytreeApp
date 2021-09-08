@@ -6,15 +6,16 @@ import { useHistory } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import FamilyTree from "../Tree/FamilyTree";
 
 const Home = () => {
   const [{ user }, dispatch] = useStateValue();
   const [open, setOpen] = useState(false);
   const [sureSignOff, setSureSignOff] = useState(false);
   const history = useHistory();
+
+  // need to work on modal
 
   useEffect(() => {
     if (sureSignOff === true) {
@@ -69,7 +70,7 @@ const Home = () => {
     <div className="home">
       {modal()}
       <FbButton text={"Sign Out"} buttonClicked={signOutClicked} />
-      {user.displayName}
+      <FamilyTree />
     </div>
   );
 };

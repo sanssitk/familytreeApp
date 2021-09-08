@@ -39,9 +39,6 @@ const App = () => {
     <Router>
       <div className="app">
         <Switch>
-          <Route path="/" exact>
-            <LandingPage />
-          </Route>
           {user ? (
             <Route path={`/home/${user.displayName.split(" ")[0]}=${uid}`}>
               <Home />
@@ -49,6 +46,9 @@ const App = () => {
           ) : (
             ""
           )}
+          <Route path="/" exact>
+            <LandingPage />
+          </Route>
         </Switch>
       </div>
     </Router>

@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
-import FbButton from "../FbButton";
+import FbButton from "../Buttons/FbButton";
 import { facebookProvider, auth } from "../../Provider/firebase";
 import { useStateValue } from "../../StateManagement/StateProvider";
 import { useHistory } from "react-router-dom";
+import "./LandingPage.css";
 
 function LandingPage() {
   const history = useHistory();
@@ -45,7 +46,7 @@ function LandingPage() {
 
   return (
     <div className="landingPage">
-      <h1>Shrestha APP</h1>
+      <h1 style={{ color: "white" }}>Shrestha APP</h1>
       <FbButton text="Login with Facebook" buttonClicked={logInClicked} />
     </div>
   );

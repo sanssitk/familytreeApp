@@ -3,6 +3,7 @@
 export const initialState = {
   user: null,
   uid: null,
+  nodeId: 2,
 };
 
 const reducer = (state, action) => {
@@ -12,6 +13,11 @@ const reducer = (state, action) => {
         ...state,
         user: action.user,
         uid: action.uid,
+      };
+    case "NODE_ID":
+      return {
+        ...state,
+        nodeId: action.nodeId,
       };
     default:
       return state;

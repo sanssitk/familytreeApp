@@ -4,6 +4,7 @@ import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import { useStateValue } from "./StateManagement/StateProvider";
 import { auth } from "./Provider/firebase";
 
+import Header from "./Components/Header/Header"
 import LandingPage from "./Components/LandingPage/LandingPage";
 import Home from "./Components/Home/Home";
 
@@ -38,6 +39,7 @@ const App = () => {
   return (
     <Router>
       <div className="app">
+        {user ? <Header /> : ""}
         <Switch>
           {user ? (
             <Route path={`/home/${user.displayName.split(" ")[0]}=${uid}`}>

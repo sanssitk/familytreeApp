@@ -1,0 +1,256 @@
+[
+  {
+    "id": "11",
+    "rels": {
+      "father": "7",
+      "mother": "10"
+    },
+    "data": {
+      "first name": "Name",
+      "last name": "Surname",
+      "birthday": 1970,
+      "gender": "F",
+      "firstName": "Bal",
+      "lastName": "Shrestha",
+      "birthDate": "1920 AD",
+      "image": "",
+      "deathDate": "",
+      "birthPlace": "Nepal",
+      "deathPlace": "Unknown",
+      "prefix": "",
+      "suffix": "",
+      "description": "",
+      "phoneNumber": "7048904961",
+      "address": ""
+    }
+  },
+  {
+    "id": "10",
+    "rels": {
+      "spouses": ["7"],
+      "children": ["11"]
+    },
+    "data": {
+      "first name": "Name",
+      "last name": "Surname",
+      "birthday": 1970,
+      "gender": "F",
+      "firstName": "Kanju",
+      "lastName": "Shrestha",
+      "birthDate": "1920 AD",
+      "image": "",
+      "deathDate": "",
+      "birthPlace": "Nepal",
+      "deathPlace": "Unknown",
+      "prefix": "",
+      "suffix": "",
+      "description": "",
+      "phoneNumber": "7048904961",
+      "address": ""
+    }
+  },
+  {
+    "id": "9",
+    "rels": {
+      "spouses": ["7"],
+      "children": ["5"]
+    },
+    "data": {
+      "first name": "Name",
+      "last name": "Surname",
+      "birthday": 1970,
+      "gender": "F",
+      "firstName": "Sanju",
+      "lastName": "Shrestha",
+      "birthDate": "1920 AD",
+      "image": "",
+      "deathDate": "",
+      "birthPlace": "Nepal",
+      "deathPlace": "Unknown",
+      "prefix": "",
+      "suffix": "",
+      "description": "",
+      "phoneNumber": "7048904961",
+      "address": ""
+    }
+  },
+  {
+    "id": "8",
+    "rels": {
+      "spouses": ["7"],
+      "children": []
+    },
+    "data": {
+      "first name": "Name",
+      "last name": "Surname",
+      "birthday": 1970,
+      "gender": "F",
+      "firstName": "Manju",
+      "lastName": "Shrestha",
+      "birthDate": "1920 AD",
+      "image": "",
+      "deathDate": "",
+      "birthPlace": "Nepal",
+      "deathPlace": "Unknown",
+      "prefix": "",
+      "suffix": "",
+      "description": "",
+      "phoneNumber": "7048904961",
+      "address": ""
+    }
+  },
+  {
+    "id": "7",
+    "rels": {
+      "spouses": ["8", "9", "10"],
+      "children": ["5"]
+    },
+    "data": {
+      "first name": "Name",
+      "last name": "Surname",
+      "birthday": 1970,
+      "gender": "M",
+      "firstName": "Khem",
+      "lastName": "Shrestha",
+      "birthDate": "1920 AD",
+      "image": "",
+      "deathDate": "",
+      "birthPlace": "Nepal",
+      "deathPlace": "Unknown",
+      "prefix": "",
+      "suffix": "",
+      "description": "",
+      "phoneNumber": "7048904961",
+      "address": ""
+    }
+  },
+  {
+    "id": "5",
+    "rels": {
+      "mother": "8",
+      "father": "7",
+      "spouses": ["6"],
+      "children": ["1"]
+    },
+    "data": {
+      "first name": "Name",
+      "last name": "Surname",
+      "birthday": 1970,
+      "gender": "M",
+      "firstName": "Ganga",
+      "lastName": "Shrestha",
+      "birthDate": "1920 AD",
+      "image": "",
+      "deathDate": "",
+      "birthPlace": "Nepal",
+      "deathPlace": "Unknown",
+      "prefix": "",
+      "suffix": "",
+      "description": "",
+      "phoneNumber": "7048904961",
+      "address": ""
+    }
+  },
+  {
+    "id": "6",
+    "rels": {
+      "spouses": ["5"],
+      "children": ["1"]
+    },
+    "data": {
+      "first name": "Name",
+      "last name": "Surname",
+      "birthday": 1970,
+      "gender": "F",
+      "firstName": "Dev",
+      "lastName": "Shrestha",
+      "birthDate": "1930 AD",
+      "image": "",
+      "deathDate": "",
+      "birthPlace": "Nepal",
+      "deathPlace": "Unknown",
+      "prefix": "",
+      "suffix": "",
+      "description": "",
+      "phoneNumber": "7048904961",
+      "address": ""
+    }
+  },
+  {
+    "id": "1",
+    "rels": {
+      "father": "5",
+      "mother": "6",
+      "spouses": ["2"],
+      "children": ["3"]
+    },
+    "data": {
+      "first name": "Name",
+      "last name": "Surname",
+      "birthday": 1970,
+      "gender": "M",
+      "firstName": "Sanjay",
+      "lastName": "Shrestha",
+      "birthDate": "1987 AD",
+      "image": "",
+      "deathDate": "",
+      "birthPlace": "Nepal",
+      "deathPlace": "Unknown",
+      "prefix": "",
+      "suffix": "",
+      "description": "",
+      "phoneNumber": "7048904961",
+      "address": ""
+    }
+  },
+  {
+    "id": "2",
+    "rels": {
+      "spouses": ["1"],
+      "children": ["3"]
+    },
+    "data": {
+      "first name": "Name",
+      "last name": "Surname",
+      "birthday": 1970,
+      "gender": "F",
+      "firstName": "Sita",
+      "lastName": "Khatri",
+      "birthDate": "1988 AD",
+      "image": "",
+      "deathDate": "",
+      "birthPlace": "Cologne, Germany",
+      "deathPlace": "Unknown",
+      "prefix": "",
+      "suffix": "",
+      "description": "",
+      "phoneNumber": "7048904961",
+      "address": ""
+    }
+  },
+  {
+    "id": "3",
+    "rels": {
+      "father": "1",
+      "mother": "2"
+    },
+    "data": {
+      "first name": "Name",
+      "last name": "Surname",
+      "birthday": 2015,
+      "gender": "M",
+      "firstName": "Sakar",
+      "lastName": "Shrestha",
+      "birthDate": "2015 AD",
+      "image": "",
+      "deathDate": "",
+      "birthPlace": "US",
+      "deathPlace": "",
+      "prefix": "",
+      "suffix": "",
+      "description": "Son",
+      "phoneNumber": "7048904961",
+      "address": ""
+    }
+  }
+]

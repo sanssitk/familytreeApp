@@ -4,15 +4,6 @@
     box-sizing: border-box;
 }
 
-.familytree {
-    height: 100vh;
-}
-
-.landingPage {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    height: 100vh;
-    align-items: center;
-    justify-content: center;
+.app {
+    background-color: #0a131f;
 }

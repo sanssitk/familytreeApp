@@ -1,0 +1,53 @@
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 16px 24px;
+    background-color: #192A40;
+    color: white;
+}
+
+.ui.search .prompt {
+    border-radius: 8px;
+}
+
+.leftArea,
+.rightArea {
+    flex: 0.15;
+}
+
+.centerArea {
+    flex: 0.6;
+    margin: 0 50px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.userName{
+    display: flex;
+    align-items: center;
+
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: lightblue;
+}
+
+.userName > img {
+    width: 36px;
+    margin-right: 16px;
+}
+
+.links{
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.links > a {
+    margin-left: 50px;
+    padding-left: 24px;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: white;
+}

@@ -14,7 +14,7 @@ const FamilyChart = (treeProps) => {
     if (!ref) return;
     if (!store) {
       const store = f3.createStore({
-          data: data,
+          data: treeProps.members,
           cont: ref,
           card_display: [
             (d) => `${d.data.firstName} ${d.data.lastName}` || "",

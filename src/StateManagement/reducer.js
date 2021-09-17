@@ -3,7 +3,7 @@
 export const initialState = {
   user: null,
   uid: null,
-  nodeId: 2,
+  nodeId: null,
 };
 
 const reducer = (state, action) => {

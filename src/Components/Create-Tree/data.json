@@ -17,10 +17,9 @@
       "deathDate": "",
       "birthPlace": "Nepal",
       "deathPlace": "Unknown",
-      "prefix": "",
-      "suffix": "",
-      "description": "",
       "phoneNumber": "7048904961",
+      "email": "",
+      "jobDetails": "",
       "address": ""
     }
   },
@@ -42,10 +41,9 @@
       "deathDate": "",
       "birthPlace": "Nepal",
       "deathPlace": "Unknown",
-      "prefix": "",
-      "suffix": "",
-      "description": "",
       "phoneNumber": "7048904961",
+      "email": "",
+      "jobDetails": "",
       "address": ""
     }
   },
@@ -67,18 +65,16 @@
       "deathDate": "",
       "birthPlace": "Nepal",
       "deathPlace": "Unknown",
-      "prefix": "",
-      "suffix": "",
-      "description": "",
       "phoneNumber": "7048904961",
+      "email": "",
+      "jobDetails": "",
       "address": ""
     }
   },
   {
     "id": "8",
     "rels": {
-      "spouses": ["7"],
-      "children": []
+      "spouses": ["7"]
     },
     "data": {
       "first name": "Name",
@@ -92,10 +88,9 @@
       "deathDate": "",
       "birthPlace": "Nepal",
       "deathPlace": "Unknown",
-      "prefix": "",
-      "suffix": "",
-      "description": "",
       "phoneNumber": "7048904961",
+      "email": "",
+      "jobDetails": "",
       "address": ""
     }
   },
@@ -117,10 +112,9 @@
       "deathDate": "",
       "birthPlace": "Nepal",
       "deathPlace": "Unknown",
-      "prefix": "",
-      "suffix": "",
-      "description": "",
       "phoneNumber": "7048904961",
+      "email": "",
+      "jobDetails": "",
       "address": ""
     }
   },
@@ -144,10 +138,9 @@
       "deathDate": "",
       "birthPlace": "Nepal",
       "deathPlace": "Unknown",
-      "prefix": "",
-      "suffix": "",
-      "description": "",
       "phoneNumber": "7048904961",
+      "email": "",
+      "jobDetails": "",
       "address": ""
     }
   },
@@ -169,10 +162,9 @@
       "deathDate": "",
       "birthPlace": "Nepal",
       "deathPlace": "Unknown",
-      "prefix": "",
-      "suffix": "",
-      "description": "",
       "phoneNumber": "7048904961",
+      "email": "",
+      "jobDetails": "",
       "address": ""
     }
   },
@@ -196,10 +188,9 @@
       "deathDate": "",
       "birthPlace": "Nepal",
       "deathPlace": "Unknown",
-      "prefix": "",
-      "suffix": "",
-      "description": "",
       "phoneNumber": "7048904961",
+      "email": "",
+      "jobDetails": "",
       "address": ""
     }
   },
@@ -221,10 +212,9 @@
       "deathDate": "",
       "birthPlace": "Cologne, Germany",
       "deathPlace": "Unknown",
-      "prefix": "",
-      "suffix": "",
-      "description": "",
       "phoneNumber": "7048904961",
+      "email": "",
+      "jobDetails": "",
       "address": ""
     }
   },
@@ -246,10 +236,9 @@
       "deathDate": "",
       "birthPlace": "US",
       "deathPlace": "",
-      "prefix": "",
-      "suffix": "",
-      "description": "Son",
       "phoneNumber": "7048904961",
+      "email": "",
+      "jobDetails": "",
       "address": ""
     }
   }

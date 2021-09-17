@@ -1,5 +1,35 @@
 .leftsideBar {
-    height: 100px;
-    width: 19.5vw;
-    background-color: red;
+    height: 100vh;
+    width: 19vw;
+    background-color: #000408;
+    margin: 2rem;
+    border-radius: 2rem;
+    color: white;
+    padding: 24px;
+}
+
+.ui.card,
+.ui.cards>.card {
+    width: 100%;
+}
+
+.ui.card.events>.content>img {
+    border: 1px solid black;
+}
+
+.rules {
+    display: flex;
+    padding: 12px 0;
+    font-weight: 600;
+    font-size: 1rem;
+    border-bottom: 1px solid white;
+}
+
+.rules>span {
+    margin-right: 0.5rem;
+    font-size: 0.8rem;
+}
+
+.rules>p {
+    line-height: 1.5rem;
 }

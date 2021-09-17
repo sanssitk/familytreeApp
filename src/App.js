@@ -4,12 +4,14 @@ import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import { useStateValue } from "./StateManagement/StateProvider";
 import { auth } from "./Provider/firebase";
 
-import Header from "./Components/Header/Header"
+import Header from "./Components/Header/Header";
 import LandingPage from "./Components/LandingPage/LandingPage";
 import Home from "./Components/Home/Home";
+import Events from "./Routes/Events";
+import Rules from "./Routes/Rules";
 
 const App = () => {
-  const [{ user, uid }, dispatch] = useStateValue();
+  const [{ user, uid, nodeId }, dispatch] = useStateValue();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -48,6 +50,12 @@ const App = () => {
           ) : (
             ""
           )}
+          <Route path="/events" exact>
+            <Events />
+          </Route>
+          <Route path="/rules" exact>
+            <Rules />
+          </Route>
           <Route path="/" exact>
             <LandingPage />
           </Route>

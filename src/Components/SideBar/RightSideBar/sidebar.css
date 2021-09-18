@@ -1,21 +1,78 @@
-/* .sideBar {
-    background-color: teal;
-    color: white;
-} */
+/* RightSidebar Title Back buttons */
+.sidebarButton {
+    display: flex;
+    margin: 0 24px;
+    margin-top: 24px;
+    align-items: center;
+}
 
+.sidebarButton>i {
+    font-size: 2rem;
+    margin-right: 16px;
+    line-height: normal;
+}
+
+.sidebarButton>h1 {
+    line-height: 1rem;
+    margin: 0;
+}
+
+/* Profile Container */
 .rightSideBar {
-    height: 100vh;
+    height: 100%;
     width: 19vw;
     background-color: #0e3d7a;
     color: white;
     transition: transform 0.3s ease;
 }
 
-.rightSideBar > nav{
+.rightSideBar>nav {
     margin: 24px;
 }
 
-.userPhoto {
-    width: 65%;
-    border-radius: 50%;
+.userBasicInfo {
+    display: flex;
+}
+
+.userPicture {
+    width: 6rem;
+    height: 6rem;
+    background-position: center center;
+    background-size: cover;
+    margin-right: 16px;
+}
+
+.userTitles>* {
+    margin: 0;
+    line-height: 2rem;
+}
+
+.userMoreInfo {
+    margin-top: 24px;
+    display: flex;
+    font-size: 1rem;
+}
+
+.userMoreInfoDetails {
+    margin-left: 3.5rem;
+    flex: 1;
+}
+.userMoreInfoDetails > *{
+    margin-bottom: 15px;
+}
+
+
+/* Buttons */
+.editButtons {
+    margin: 24px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.fluid.ui.buttons.spacing {
+    margin-bottom: 8px;
+}
+
+.fluid.ui.buttons.spacing>button:first-child {
+    margin-right: 15px;
 }

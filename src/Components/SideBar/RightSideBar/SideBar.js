@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import "./sidebar.css";
 import { useStateValue } from "../../../StateManagement/StateProvider";
 import db from "../../../Provider/firebase";
+import { getCurrentNode } from "../../Helpers/firebaseCRUD";
 
 const SideBar = () => {
-  const [{ nodeId, uid }, dispatch] = useStateValue();
+  const [{ nodeId, uid, user }, dispatch] = useStateValue();
   const [sideDetails, setSidedetails] = useState(nodeId);
 
   useEffect(() => {
@@ -20,70 +21,146 @@ const SideBar = () => {
       });
   }, [nodeId]);
 
-  const handleClick = () => {
+  const handleCancelClick = () => {
     dispatch({
       type: "NODE_ID",
       nodeId: null,
     });
   };
 
-  const addFather = () => {
-    const shresthaDB = db.ref("relatives");
-    const data = {
-      id: "3",
-      rels: {
-        father: "1",
-        mother: "2",
-      },
-      data: {
-        "first name": "Name",
-        "last name": "Surname",
-        birthday: 2015,
-        gender: "M",
-        firstName: "Sakar",
-        lastName: "Shrestha",
-        birthDate: "2015 AD",
-        image: "",
-        deathDate: "",
-        birthPlace: "US",
-        deathPlace: "",
-        phoneNumber: "7048904961",
-        email: "",
-        jobDetails: "",
-        address: "",
-      },
-    };
-    shresthaDB.push(data);
+  const data = {
+    id: "12",
+    rels: {
+      father: "",
+      mother: "",
+      spouses: ["3"],
+      children: [],
+      brother: [],
+      sister: [],
+    },
+    data: {
+      "first name": "Name",
+      "last name": "Surname",
+      birthday: 1970,
+      gender: "F",
+      firstName: "Test",
+      lastName: "Test",
+      birthDate: "1988 AD",
+      image: "",
+      deathDate: "",
+      birthPlace: "Cologne, Germany",
+      deathPlace: "Unknown",
+      phoneNumber: "7048904961",
+      email: "",
+      jobDetails: "",
+      address: "",
+    },
   };
-
-  const getFather = () => {
-    const data = {
-      id: "1",
-      postBy: "",
-      postOn: "",
-      event: "This is 2 test",
-    };
-    db.ref("events").push(data);
-  };
-
-  // console.log("uid", uid);
-  // sideDetails && console.log("firebase", sideDetails.uid);
 
   const renderButtons = () => {
     if (sideDetails && uid === sideDetails.uid) {
       return (
-        <div>
-          <button>Edit Info</button>
-          <button>+ Son</button>
-          <button>+ Daughter</button>
-          <button onClick={addFather}>+ Father</button>
-          <button>+ Mother</button>
-          <button>+ Brother</button>
-          <button>+ Sister</button>
-          <button>Save</button>
-          <button onClick={handleClick}>Cancel</button>
-          <button onClick={getFather}>get Father</button>
+        <div className="editButtons">
+          <div className="fluid ui buttons spacing">
+            <button
+              className="ui grey button"
+              onClick={() => getCurrentNode(3, "spouses", data)}
+            >
+              <i className="icon user"></i>+ Father
+            </button>
+            <button className="ui grey button">
+              <i className="icon user"></i>+ Mother
+            </button>
+          </div>
+          <div className="fluid ui buttons spacing">
+            <button className="ui grey button">
+              <i className="icon user"></i>+ Add Son
+            </button>
+            <button className="ui grey button">
+              <i className="icon user"></i>+ Daughter
+            </button>
+          </div>
+          <div className="fluid ui buttons spacing">
+            <button className="ui grey button">
+              <i className="icon user"></i>+ Brother
+            </button>
+            <button className="ui grey button">
+              <i className="icon user"></i>+ SIS-TERS
+            </button>
+          </div>
+
+          <div className="fluid ui buttons">
+            <button className="ui blue button">
+              <i className="icon user"></i>
+              Edit Profile
+            </button>
+            <div className="or"></div>
+            <button className="ui red button" onClick={handleCancelClick}>
+              Cancel
+            </button>
+            <div className="or"></div>
+            <button className="ui positive button">Save</button>
+          </div>
         </div>
+      );
+    }
+  };
+  const renderUserInfo = () => {
+    if (sideDetails) {
+      return (
+        <nav>
+          <div className="userBasicInfo">
+            <div
+              className="userPicture"
+              style={{
+                backgroundImage: `url(${user.photoURL})`,
+              }}
+            ></div>
+            <div className="userTitles">
+              <h3>
+                {`${sideDetails.data.firstName} ${sideDetails.data.lastName}`}
+              </h3>
+              <h3>Tel: {sideDetails.data.phoneNumber}</h3>
+              <h3>Email: {sideDetails.data.email}</h3>
+            </div>
+          </div>
+          <div className="userMoreInfo">
+            <div className="userMoreInfoTitle">
+              <p>DOB:</p>
+              <p>Address:</p>
+              <p>Job:</p>
+              <p>Father:</p>
+              <p>Mother:</p>
+              <p>Brother:</p>
+              <p>Sister:</p>
+            </div>
+            <div className="userMoreInfoDetails">
+              <input
+                style={{
+                  backgroundColor: "rgba(0, 0, 0, 0.0)",
+                  border: "none",
+                  color: "white",
+                }}
+                type="text"
+                placeholder={sideDetails.data.birthDate}
+              />
+              <p>
+                {sideDetails.data.address === ""
+                  ? "N/a"
+                  : sideDetails.data.address}
+              </p>
+              <p>
+                {sideDetails.data.jobDetails === ""
+                  ? "N/a"
+                  : sideDetails.data.jobDetails}
+              </p>
+              <p>Father</p>
+              <p>Mother</p>
+              <p>Brother</p>
+              <p>Sister</p>
+            </div>
+          </div>
+        </nav>
       );
     }
   };
@@ -93,24 +170,12 @@ const SideBar = () => {
       className="rightSideBar"
       style={{ transform: nodeId ? "translateX(0)" : "translateX(100%)" }}
     >
-      <nav>
-        <i className="angle left icon" onClick={handleClick}></i>
+      <div className="sidebarButton">
+        <i className="angle left icon" onClick={handleCancelClick}></i>
         <h1>Details</h1>
-        <img
-          className="userPhoto"
-          src={
-            "https://www.pikpng.com/pngl/m/80-805068_my-profile-icon-blank-profile-picture-circle-clipart.png"
-          }
-        />
-        <h4>FirstName: {sideDetails && sideDetails.data.firstName}</h4>
-        <h4>LastName: {sideDetails && sideDetails.data.lastName}</h4>
-        <h4>Contact: {sideDetails && sideDetails.data.phoneNumber}</h4>
-        <h4>Email: {sideDetails && sideDetails.data.email}</h4>
-        <h4>Address: {sideDetails && sideDetails.data.address}</h4>
-        <h4>Date of Birth: {sideDetails && sideDetails.data.birthDate}</h4>
-        <h4>Job: {sideDetails && sideDetails.data.jobDetails}</h4>
-        {renderButtons()}
-      </nav>
+      </div>
+      {renderUserInfo()}
+      {renderButtons()}
     </div>
   );
 };

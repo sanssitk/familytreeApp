@@ -5,10 +5,10 @@ import { StateProvider } from "./StateManagement/StateProvider";
 import reducer, { initialState } from "./StateManagement/reducer";
 
 ReactDOM.render(
-  <React.StrictMode>
+  <>
     <StateProvider initialState={initialState} reducer={reducer}>
       <App />
     </StateProvider>
-  </React.StrictMode>,
+  </>,
   document.getElementById("root")
 );

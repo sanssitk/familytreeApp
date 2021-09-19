@@ -6,6 +6,7 @@ import { auth } from "./Provider/firebase";
 
 import Header from "./Components/Header/Header";
 import LandingPage from "./Components/LandingPage/LandingPage";
+import LoginUserForm from "./Components/Forms/LoginUserForm";
 import Home from "./Components/Home/Home";
 import Events from "./Routes/Events";
 import Rules from "./Routes/Rules";
@@ -55,6 +56,9 @@ const App = () => {
           </Route>
           <Route path="/rules" exact>
             <Rules />
+          </Route>
+          <Route path="/form" exact>
+            <LoginUserForm />
           </Route>
           <Route path="/" exact>
             <LandingPage />

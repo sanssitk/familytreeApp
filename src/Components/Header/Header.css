@@ -37,7 +37,11 @@
 
 .userName > img {
     width: 36px;
-    margin-right: 16px;
+    margin-right: 1rem;
+}
+
+.userName > a {
+    margin-right: 1rem;
 }
 
 .links{

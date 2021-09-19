@@ -1,0 +1,11 @@
+.ui.form {
+    background-color: white;
+    padding: 3.5rem;
+}
+
+.inputfile {
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}

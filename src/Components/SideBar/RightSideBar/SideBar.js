@@ -62,9 +62,17 @@ const SideBar = () => {
       return (
         <div className="editButtons">
           <div className="fluid ui buttons spacing">
+            <button className="ui grey button">
+              <i className="icon user"></i>+ spouses
+            </button>
+            <button className="ui grey button">
+              <i className="icon user"></i>+ Add Child
+            </button>
+          </div>
+          <div className="fluid ui buttons spacing">
             <button
               className="ui grey button"
-              onClick={() => getCurrentNode(3, "spouses", data)}
+              onClick={() => getCurrentNode("3")}
             >
               <i className="icon user"></i>+ Father
             </button>
@@ -72,14 +80,7 @@ const SideBar = () => {
               <i className="icon user"></i>+ Mother
             </button>
           </div>
-          <div className="fluid ui buttons spacing">
-            <button className="ui grey button">
-              <i className="icon user"></i>+ Add Son
-            </button>
-            <button className="ui grey button">
-              <i className="icon user"></i>+ Daughter
-            </button>
-          </div>
+
           <div className="fluid ui buttons spacing">
             <button className="ui grey button">
               <i className="icon user"></i>+ Brother

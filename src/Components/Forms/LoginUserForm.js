@@ -1,17 +1,46 @@
-import React from "react";
+import React, { useState } from "react";
 import "./forms.css";
 import { useStateValue } from "../../StateManagement/StateProvider";
 
 const LoginUserForm = () => {
   const [{ nodeId, user, uid }, dispatch] = useStateValue();
 
-  const handleSubmit = (e) => {
+  const [fname, setFname] = useState(user?.displayName.split(" ")[0]);
+  const [lname, setLname] = useState(user?.displayName.split(" ")[0]);
+  const [address, setAddress] = useState();
+  const [houseNo, setHouseNo] = useState();
+  const [state, setState] = useState();
+  const [country, setCountry] = useState();
+  const [gender, setGender] = useState("M");
+  const [dob, setDob] = useState();
+  const [phNumber, setPhNumber] = useState();
+  const [email, setEmail] = useState();
+  const [job, setJob] = useState();
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const handleFromSubmit = (e) => {
     e.preventDefault();
-    console.log(e.target.value);
+    const formData = new FormData();
+    console.log(fname);
+    console.log(lname);
+    console.log(address);
+    console.log(houseNo);
+    console.log(state);
+    console.log(country);
+    console.log(gender);
+    console.log(dob);
+    console.log(phNumber);
+    console.log(email);
+    console.log(job);
+    console.log(selectedFile);
+  };
+
+  const onFileChange = (e) => {
+    setSelectedFile(e.target.files[0]);
   };
 
   return (
-    <form className="ui form" onSubmit={handleSubmit}>
+    <form className="ui form">
       <h4 className="ui dividing header"> INFORMATION</h4>
       <div className="required field">
         <label>Name</label>
@@ -20,6 +49,7 @@ const LoginUserForm = () => {
             <input
               type="text"
               name="firstname"
+              onChange={(e) => setFname(e.target.value)}
               placeholder={user?.displayName.split(" ")[0]}
             />
           </div>
@@ -27,26 +57,41 @@ const LoginUserForm = () => {
             <input
               type="text"
               name="lastname"
+              onChange={(e) => setLname(e.target.value)}
               placeholder={user?.displayName.split(" ")[1]}
             />
           </div>
         </div>
       </div>
-      <div className="field">
+      <div className="required field">
         <label>Address</label>
         <div className="fields">
           <div className="twelve wide field">
-            <input type="text" name="address" placeholder="Street Address" />
+            <input
+              onChange={(e) => setAddress(e.target.value)}
+              type="text"
+              name="address"
+              placeholder="Street Address"
+            />
           </div>
           <div className="four wide field">
-            <input type="text" name="houseNo" placeholder="House No" />
+            <input
+              onChange={(e) => setHouseNo(e.target.value)}
+              type="text"
+              name="houseNo"
+              placeholder="House No"
+            />
           </div>
         </div>
       </div>
       <div className="two fields">
         <div className="field">
           <label>State</label>
-          <select value="1" className="ui fluid dropdown">
+          <select
+            onChange={(e) => setState(e.target.value)}
+            value="1"
+            className="ui fluid dropdown"
+          >
             <option value="1">1. Arun Kshetra</option>
             <option value="2">2. Janakpur Kshetra</option>
             <option value="3">3. Kathmandu Kshetra</option>
@@ -56,20 +101,29 @@ const LoginUserForm = () => {
             <option value="7">7. Mahakali Kshetra</option>
           </select>
         </div>
-        <div className="field">
+        <div className="required field">
           <label>Country</label>
           <div className="fields">
             <div className="sixteen wide field">
-              <input type="text" name="country" placeholder="Nepal" />
+              <input
+                onChange={(e) => setCountry(e.target.value)}
+                type="text"
+                name="country"
+                placeholder="Nepal"
+              />
             </div>
           </div>
         </div>
       </div>
 
       <div className="four fields">
-        <div className="field">
+        <div className="required field">
           <label>Gender</label>
-          <select value="M" className="ui fluid dropdown">
+          <select
+            onChange={(e) => setGender(e.target.value)}
+            value={gender}
+            className="ui fluid dropdown"
+          >
             <option value="">Select Gender</option>
             <option value="M">Male</option>
             <option value="F">Female</option>
@@ -79,7 +133,13 @@ const LoginUserForm = () => {
           <label>Date of Birth</label>
           <div className="fields">
             <div className="sixteen wide field">
-              <input value="date" type="date" name="shipping[address]" />
+              <input
+                onChange={(e) => setDob(e.target.value)}
+                type="date"
+                name="dob"
+                required
+                pattern="\d{4}-\d{2}-\d{2}"
+              />
             </div>
           </div>
         </div>
@@ -87,7 +147,12 @@ const LoginUserForm = () => {
           <label>Phone Number</label>
           <div className="fields">
             <div className="sixteen wide field">
-              <input type="number" name="phoneNumber" placeholder="984-" />
+              <input
+                onChange={(e) => setPhNumber(e.target.value)}
+                type="number"
+                name="phoneNumber"
+                placeholder="984-"
+              />
             </div>
           </div>
         </div>
@@ -95,7 +160,12 @@ const LoginUserForm = () => {
           <label>Email</label>
           <div className="fields">
             <div className="sixteen wide field">
-              <input type="email" name="email" placeholder="abc@gmail.com" />
+              <input
+                onChange={(e) => setEmail(e.target.value)}
+                type="email"
+                name="email"
+                placeholder="abc@gmail.com"
+              />
             </div>
           </div>
         </div>
@@ -103,13 +173,18 @@ const LoginUserForm = () => {
 
       <div className="field">
         <label>Job Details</label>
-        <textarea value="jobText" rows="2"></textarea>
+        <textarea onChange={(e) => setJob(e.target.value)} rows="2"></textarea>
       </div>
 
       <div className="two fields">
         <div className="field">
           <div className="ui fluid ">
-            <input type="file" className="inputfile" id="embedpollfileinput" />
+            <input
+              onChange={onFileChange}
+              type="file"
+              className="inputfile"
+              id="embedpollfileinput"
+            />
             <label
               htmlFor="embedpollfileinput"
               className="ui huge green right floated button"
@@ -120,7 +195,7 @@ const LoginUserForm = () => {
           </div>
         </div>
 
-        <div className="field">
+        <div onClick={handleFromSubmit} typeof="submit" className="field">
           <div className="fields">
             <div className="ui huge blue right floated button" tabIndex="0">
               Save

@@ -1,42 +1,84 @@
 import React, { useState } from "react";
 import "./forms.css";
 import { useStateValue } from "../../StateManagement/StateProvider";
+import { storage } from "../../Provider/firebase";
+import { v4 as uuidv4 } from "uuid";
+import db from "../../Provider/firebase";
 
 const LoginUserForm = () => {
   const [{ nodeId, user, uid }, dispatch] = useStateValue();
-
   const [fname, setFname] = useState(user?.displayName.split(" ")[0]);
   const [lname, setLname] = useState(user?.displayName.split(" ")[0]);
-  const [address, setAddress] = useState();
-  const [houseNo, setHouseNo] = useState();
+  const [address, setAddress] = useState("");
+  const [houseNo, setHouseNo] = useState("");
   const [state, setState] = useState();
-  const [country, setCountry] = useState();
-  const [gender, setGender] = useState("M");
+  const [country, setCountry] = useState("");
+  const [gender, setGender] = useState();
   const [dob, setDob] = useState();
-  const [phNumber, setPhNumber] = useState();
-  const [email, setEmail] = useState();
-  const [job, setJob] = useState();
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [phNumber, setPhNumber] = useState("");
+  const [email, setEmail] = useState("");
+  const [job, setJob] = useState("");
+  const [fbImageUrl, setFbImageUrl] = useState();
 
   const handleFromSubmit = (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    console.log(fname);
-    console.log(lname);
-    console.log(address);
-    console.log(houseNo);
-    console.log(state);
-    console.log(country);
-    console.log(gender);
-    console.log(dob);
-    console.log(phNumber);
-    console.log(email);
-    console.log(job);
-    console.log(selectedFile);
+    const member = {
+      id: uuidv4(),
+      uid: uid,
+      rels: {
+        father: "",
+        mother: "",
+        children: [],
+        spouses: [],
+      },
+      data: {
+        "first name": "Name",
+        "last name": "Surname",
+        birthday: dob.split("-")[2],
+        gender: gender,
+        firstName: fname,
+        lastName: lname,
+        birthDate: dob,
+        image: `${fbImageUrl ? fbImageUrl : user?.photoURL}`,
+        deathDate: "",
+        birthPlace: country,
+        deathPlace: "Unknown",
+        phoneNumber: phNumber,
+        email: email,
+        jobDetails: job,
+        address: `${address}-${houseNo}-${state}-${country}`,
+      },
+    };
+    db.ref("relatives").push(member);
+  };
+
+  const uploadPicture = (fbUrl) => {
+    const uploadTask = storage.ref(`images/${uid}.jpg`).put(fbUrl);
+    uploadTask.on(
+      "stage_changed",
+      (snapshot) => {},
+      (err) => console.log(err),
+      () => {
+        storage
+          .ref("images")
+          .child(`${uid}.jpg`)
+          .getDownloadURL()
+          .then((url) => setFbImageUrl(url));
+      }
+    );
   };
 
   const onFileChange = (e) => {
-    setSelectedFile(e.target.files[0]);
+    if (e.target.files[0]) {
+      // setSelectedFile(e.target.files[0]);
+      uploadPicture(e.target.files[0]);
+    }
+  };
+
+  const handleDisableButton = () => {
+    if (!fname || !lname || !address || !state || !gender || !dob) {
+      return "disabled";
+    }
   };
 
   return (
@@ -85,23 +127,24 @@ const LoginUserForm = () => {
         </div>
       </div>
       <div className="two fields">
-        <div className="field">
+        <div className="required field">
           <label>State</label>
           <select
             onChange={(e) => setState(e.target.value)}
-            value="1"
+            value={state}
             className="ui fluid dropdown"
           >
-            <option value="1">1. Arun Kshetra</option>
-            <option value="2">2. Janakpur Kshetra</option>
-            <option value="3">3. Kathmandu Kshetra</option>
-            <option value="4">4. Gandak Kshetra</option>
-            <option value="5">5. Kapilavastu Kshetra</option>
-            <option value="6">6. Karnali Kshetra</option>
-            <option value="7">7. Mahakali Kshetra</option>
+            <option value="">Select State</option>
+            <option value="Arun Kshetra">1. Arun Kshetra</option>
+            <option value="Janakpur Kshetra">2. Janakpur Kshetra</option>
+            <option value="Kathmandu Kshetra">3. Kathmandu Kshetra</option>
+            <option value="Gandak Kshetra">4. Gandak Kshetra</option>
+            <option value="Kapilavastu Kshetra">5. Kapilavastu Kshetra</option>
+            <option value="Karnali Kshetra">6. Karnali Kshetra</option>
+            <option value="Mahakali Kshetra">7. Mahakali Kshetra</option>
           </select>
         </div>
-        <div className="required field">
+        <div className="field">
           <label>Country</label>
           <div className="fields">
             <div className="sixteen wide field">
@@ -129,7 +172,7 @@ const LoginUserForm = () => {
             <option value="F">Female</option>
           </select>
         </div>
-        <div className="field">
+        <div className="required field">
           <label>Date of Birth</label>
           <div className="fields">
             <div className="sixteen wide field">
@@ -138,7 +181,7 @@ const LoginUserForm = () => {
                 type="date"
                 name="dob"
                 required
-                pattern="\d{4}-\d{2}-\d{2}"
+                pattern="\d{2}-\d{2}-\d{4}"
               />
             </div>
           </div>
@@ -195,9 +238,16 @@ const LoginUserForm = () => {
           </div>
         </div>
 
-        <div onClick={handleFromSubmit} typeof="submit" className="field">
+        <div
+          onClick={handleFromSubmit}
+          typeof="submit"
+          className={`field ${handleDisableButton()}`}
+        >
           <div className="fields">
-            <div className="ui huge blue right floated button" tabIndex="0">
+            <div
+              className="ui huge blue right floated button disable"
+              tabIndex="0"
+            >
               Save
             </div>
           </div>

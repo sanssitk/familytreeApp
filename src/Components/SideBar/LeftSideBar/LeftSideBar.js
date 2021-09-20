@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./LeftSidebar.css";
-import { storage } from "../../../Provider/firebase";
+import { firestore } from "../../../Provider/firebase";
 import Events from "./Events";
 import Rules from "./Rules";
 import { Card } from "semantic-ui-react";
@@ -10,14 +10,14 @@ function LeftSideBar() {
   const [rules, setRules] = useState([]);
 
   useEffect(() => {
-    storage
+    firestore
       .collection("events")
       .onSnapshot((snapshot) =>
         setEventDatas(snapshot.docs.map((doc) => doc.data()))
       );
   }, []);
   useEffect(() => {
-    storage
+    firestore
       .collection("rules")
       .onSnapshot((snapshot) =>
         setRules(snapshot.docs.map((doc) => doc.data()))

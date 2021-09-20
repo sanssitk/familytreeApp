@@ -19,7 +19,8 @@ const firebaseApp = firebase.initializeApp(firebaseConfig);
 
 // Creating dbsetup
 const db = firebaseApp.database();
-const storage = firebaseApp.firestore();
+const firestore = firebaseApp.firestore();
+const storage = firebaseApp.storage();
 
 // Authenticating
 const auth = firebase.auth();
@@ -28,5 +29,5 @@ const auth = firebase.auth();
 const facebookProvider = new firebase.auth.FacebookAuthProvider();
 facebookProvider.addScope("user_birthday");
 
-export { auth, facebookProvider, storage };
+export { auth, facebookProvider, firestore, storage };
 export default db;

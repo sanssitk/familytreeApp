@@ -5,8 +5,9 @@ import { storage } from "../../Provider/firebase";
 import { v4 as uuidv4 } from "uuid";
 import db from "../../Provider/firebase";
 
-const LoginUserForm = () => {
+const LoginUserForm = (userUid) => {
   const [{ nodeId, user, uid }, dispatch] = useStateValue();
+
   const [fname, setFname] = useState(user?.displayName.split(" ")[0]);
   const [lname, setLname] = useState(user?.displayName.split(" ")[0]);
   const [address, setAddress] = useState("");
@@ -20,6 +21,20 @@ const LoginUserForm = () => {
   const [job, setJob] = useState("");
   const [fbImageUrl, setFbImageUrl] = useState();
 
+  if (userUid)
+    return (
+      <div
+        style={{
+          height: "100vh",
+          color: "white",
+          textAlign: "center",
+          margin: "auto auto",
+        }}
+      >
+        <h1>You already have data added</h1>
+      </div>
+    );
+
   const handleFromSubmit = (e) => {
     e.preventDefault();
     const member = {
@@ -28,8 +43,6 @@ const LoginUserForm = () => {
       rels: {
         father: "",
         mother: "",
-        children: [],
-        spouses: [],
       },
       data: {
         "first name": "Name",

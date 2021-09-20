@@ -119,10 +119,10 @@ const SideBar = () => {
             ></div>
             <div className="userTitles">
               <h3>
-                {`${sideDetails.data.firstName} ${sideDetails.data.lastName}`}
+                {`${sideDetails?.data.firstName} ${sideDetails?.data.lastName}`}
               </h3>
-              <h3>Tel: {sideDetails.data.phoneNumber}</h3>
-              <h3>Email: {sideDetails.data.email}</h3>
+              <h3>Tel: {sideDetails?.data.phoneNumber}</h3>
+              <h3>Email: {sideDetails?.data.email}</h3>
             </div>
           </div>
           <div className="userMoreInfo">

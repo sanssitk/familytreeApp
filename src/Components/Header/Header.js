@@ -12,27 +12,13 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { Icon } from "semantic-ui-react";
 
-const Header = () => {
+const Header = (userUid) => {
   const [{ nodeId, user, uid }, dispatch] = useStateValue();
   const [open, setOpen] = useState(false);
   const [sureSignOff, setSureSignOff] = useState(false);
   const history = useHistory();
   const [updater, setUpdate] = useState(true);
-  const location = useLocation();
-
-  const [userUid, setUserUid] = useState();
-
-  useEffect(() => {
-    db.ref("relatives")
-      .orderByChild("uid")
-      .equalTo(uid)
-      .once("value", (snapshot) => {
-        if (snapshot.exists()) {
-          const userUId = snapshot.val();
-          setUserUid(userUId);
-        }
-      });
-  }, []);
+  const location = useLocation();  
 
   useEffect(() => {
     setUpdate(!updater);
@@ -65,9 +51,9 @@ const Header = () => {
   };
 
   const renderAddMemberIcon = () => {
-    if (userUid) {
+    if (!userUid) {
       return (
-        <Link to="/form">
+        <Link to="/form" >
           <Icon.Group size="small">
             <Icon loading size="big" name="circle notch" />
             <Icon name="add user" />

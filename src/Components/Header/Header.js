@@ -4,21 +4,34 @@ import "./Header.css";
 import FbButton from "../Buttons/FbButton";
 import { useStateValue } from "../../StateManagement/StateProvider";
 import { auth } from "../../Provider/firebase";
-import db from "../../Provider/firebase";
 import { useHistory } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { Icon } from "semantic-ui-react";
+import db from "../../Provider/firebase";
 
-const Header = (userUid) => {
-  const [{ nodeId, user, uid }, dispatch] = useStateValue();
+const Header = () => {
+  const [userUid, setUserUid] = useState();
+  const [{ user, uid }, dispatch] = useStateValue();
   const [open, setOpen] = useState(false);
   const [sureSignOff, setSureSignOff] = useState(false);
   const history = useHistory();
   const [updater, setUpdate] = useState(true);
-  const location = useLocation();  
+  const location = useLocation();
+
+  useEffect(() => {
+    db.ref("relatives")
+      .orderByChild("uid")
+      .equalTo(uid)
+      .once("value", (snapshot) => {
+        if (snapshot.exists()) {
+          const uUid = snapshot.val();
+          setUserUid(uUid);
+        }
+      });
+  }, [updater]);
 
   useEffect(() => {
     setUpdate(!updater);
@@ -53,7 +66,14 @@ const Header = (userUid) => {
   const renderAddMemberIcon = () => {
     if (!userUid) {
       return (
-        <Link to="/form" >
+        <Link
+          to={{
+            pathname: "/form",
+            state: {
+              isUserUid: true,
+            },
+          }}
+        >
           <Icon.Group size="small">
             <Icon loading size="big" name="circle notch" />
             <Icon name="add user" />

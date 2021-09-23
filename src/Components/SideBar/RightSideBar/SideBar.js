@@ -2,11 +2,28 @@ import React, { useEffect, useState } from "react";
 import "./sidebar.css";
 import { useStateValue } from "../../../StateManagement/StateProvider";
 import db from "../../../Provider/firebase";
-import { getCurrentNode } from "../../Helpers/firebaseCRUD";
+import DetailsComponent from "./DetailsComponent";
+import ProfilePicture from "./ProfilePicture";
+import { dbServices } from "../../../Services/firebaseServices";
+import AddButtons from "./AddButtons";
 
 const SideBar = () => {
   const [{ nodeId, uid, user }, dispatch] = useStateValue();
-  const [sideDetails, setSidedetails] = useState(nodeId);
+  const [sideDetails, setSidedetails] = useState();
+  const [disableEdit, setDisableEdit] = useState(true);
+  const [saveActive, setSaveActive] = useState(false);
+
+  const [address, setAddress] = useState();
+  const [job, setJob] = useState();
+
+  const buttonLists = [
+    "Spouses",
+    "Children",
+    "Father",
+    "Mother",
+    "Brother",
+    "Sister",
+  ];
 
   useEffect(() => {
     if (!nodeId) return;
@@ -21,77 +38,82 @@ const SideBar = () => {
       });
   }, [nodeId]);
 
+  const data = {
+    id: "12",
+    uid: uid,
+    rels: {
+      father: "",
+      mother: "",
+      spouses: [],
+      children: [],
+    },
+    data: {
+      address: "",
+      birthDate: "1987-13-3 AD",
+      birthPlace: "Nepal, Kathmandu",
+      email: "",
+      firstName: "Test",
+      gender: "F",
+      image: "",
+      jobDetails: "",
+      lastName: "Test",
+      phoneNumber: "7048904961",
+    },
+  };
+
   const handleCancelClick = () => {
+    renderInfos();
     dispatch({
       type: "NODE_ID",
       nodeId: null,
     });
+    setSidedetails(null);
+    setDisableEdit(true);
   };
 
-  const data = {
-    id: "12",
-    rels: {
-      father: "",
-      mother: "",
-      spouses: ["3"],
-      children: [],
-      brother: [],
-      sister: [],
-    },
-    data: {
-      "first name": "Name",
-      "last name": "Surname",
-      birthday: 1970,
-      gender: "F",
-      firstName: "Test",
-      lastName: "Test",
-      birthDate: "1988 AD",
-      image: "",
-      deathDate: "",
-      birthPlace: "Cologne, Germany",
-      deathPlace: "Unknown",
-      phoneNumber: "7048904961",
-      email: "",
-      jobDetails: "",
-      address: "",
-    },
+  const renderInfos = () => {
+    const datas = sideDetails?.data;
+    const lists = [];
+    for (const property in datas) {
+      lists.push({ title: property, text: datas[property] });
+    }
+    return lists.map((list, i) => {
+      if (
+        list.title !== "firstName" &&
+        list.title !== "lastName" &&
+        list.title !== "phoneNumber" &&
+        list.title !== "image" &&
+        list.title !== "gender" &&
+        list.title !== "email"
+      ) {
+        return (
+          <DetailsComponent
+            key={i}
+            title={list.title}
+            text={list.text}
+            toggleDisable={disableEdit}
+            handleChange={handleChange}
+          />
+        );
+      }
+    });
   };
 
   const renderButtons = () => {
     if (sideDetails && uid === sideDetails.uid) {
       return (
         <div className="editButtons">
-          <div className="fluid ui buttons spacing">
-            <button className="ui grey button">
-              <i className="icon user"></i>+ spouses
-            </button>
-            <button className="ui grey button">
-              <i className="icon user"></i>+ Add Child
-            </button>
-          </div>
-          <div className="fluid ui buttons spacing">
-            <button
-              className="ui grey button"
-              onClick={() => getCurrentNode("3")}
-            >
-              <i className="icon user"></i>+ Father
-            </button>
-            <button className="ui grey button">
-              <i className="icon user"></i>+ Mother
-            </button>
-          </div>
-
-          <div className="fluid ui buttons spacing">
-            <button className="ui grey button">
-              <i className="icon user"></i>+ Brother
-            </button>
-            <button className="ui grey button">
-              <i className="icon user"></i>+ SIS-TERS
-            </button>
+          <div className="three ui buttons segment">
+            {buttonLists.map((buttonlist, i) => (
+              <AddButtons key={i} buttonlist={buttonlist} />
+            ))}
           </div>
 
           <div className="fluid ui buttons">
-            <button className="ui blue button">
+            <button
+              onClick={() => setDisableEdit(false)}
+              className="ui blue button"
+            >
               <i className="icon user"></i>
               Edit Profile
             </button>
@@ -100,69 +122,48 @@ const SideBar = () => {
               Cancel
             </button>
             <div className="or"></div>
-            <button className="ui positive button">Save</button>
+            <button
+              onClick={handleSaveUpload}
+              className={`ui positive button ${saveActive ? "" : "disabled"}`}
+            >
+              Save
+            </button>
           </div>
         </div>
       );
     }
   };
-  const renderUserInfo = () => {
-    if (sideDetails) {
-      return (
-        <nav>
-          <div className="userBasicInfo">
-            <div
-              className="userPicture"
-              style={{
-                backgroundImage: `url(${user.photoURL})`,
-              }}
-            ></div>
-            <div className="userTitles">
-              <h3>
-                {`${sideDetails?.data.firstName} ${sideDetails?.data.lastName}`}
-              </h3>
-              <h3>Tel: {sideDetails?.data.phoneNumber}</h3>
-              <h3>Email: {sideDetails?.data.email}</h3>
-            </div>
-          </div>
-          <div className="userMoreInfo">
-            <div className="userMoreInfoTitle">
-              <p>DOB:</p>
-              <p>Address:</p>
-              <p>Job:</p>
-              <p>Father:</p>
-              <p>Mother:</p>
-              <p>Brother:</p>
-              <p>Sister:</p>
-            </div>
-            <div className="userMoreInfoDetails">
-              <input
-                style={{
-                  backgroundColor: "rgba(0, 0, 0, 0.0)",
-                  border: "none",
-                  color: "white",
-                }}
-                type="text"
-                placeholder={sideDetails.data.birthDate}
-              />
-              <p>
-                {sideDetails.data.address === ""
-                  ? "N/a"
-                  : sideDetails.data.address}
-              </p>
-              <p>
-                {sideDetails.data.jobDetails === ""
-                  ? "N/a"
-                  : sideDetails.data.jobDetails}
-              </p>
-              <p>Father</p>
-              <p>Mother</p>
-              <p>Brother</p>
-              <p>Sister</p>
-            </div>
-          </div>
-        </nav>
-      );
+
+  const handleSaveUpload = () => {
+    if (job) {
+      dbServices.updateData(uid, job);
+    }
+    if (address) {
+      dbServices.updateData(uid, address);
+    }
+    setDisableEdit(true);
+    return null;
+  };
+
+  const handleSave = (target) => {
+    const title = target.title;
+    const value = target.value;
+    const data = {
+      title: title,
+      value: value,
+    };
+    if (data.title === "address") {
+      setAddress(data);
+    }
+    if (data.title === "jobDetails") {
+      setJob(data);
+    }
+  };
+
+  const handleChange = (e) => {
+    if (e.target.value) {
+      setSaveActive(true);
+      handleSave(e.target);
     }
   };
 
@@ -175,7 +176,9 @@ const SideBar = () => {
         <i className="angle left icon" onClick={handleCancelClick}></i>
         <h1>Details</h1>
       </div>
-      {renderUserInfo()}
+      {sideDetails && (
+        <ProfilePicture sideDetails={sideDetails} renderInfos={renderInfos} />
+      )}
       {renderButtons()}
     </div>
   );

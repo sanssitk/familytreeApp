@@ -1,21 +1,18 @@
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import { useStateValue } from "./StateManagement/StateProvider";
-import db from "./Provider/firebase";
 import { auth } from "./Provider/firebase";
-
 import Header from "./Components/Header/Header";
 import LandingPage from "./Components/LandingPage/LandingPage";
 import LoginUserForm from "./Components/Forms/LoginUserForm";
 import Home from "./Components/Home/Home";
 import Events from "./Routes/Events";
 import Rules from "./Routes/Rules";
+import AddMember from "./Routes/AddMember";
 
 const App = () => {
-  const [{ user, uid, nodeId }, dispatch] = useStateValue();
-
-  const [userUid, setUserUid] = useState();
+  const [{ user, uid, member }, dispatch] = useStateValue();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -42,22 +39,10 @@ const App = () => {
     };
   }, []);
 
-  useEffect(() => {
-    db.ref("relatives")
-      .orderByChild("uid")
-      .equalTo(uid)
-      .once("value", (snapshot) => {
-        if (snapshot.exists()) {
-          const userUId = snapshot.val();
-          setUserUid(userUId);
-        }
-      });
-  }, []);
-
   return (
     <Router>
       <div className="app">
-        {user ? <Header userUid={userUid} /> : ""}
+        {user ? <Header /> : ""}
         <Switch>
           {user ? (
             <Route path={`/home/${user.displayName.split(" ")[0]}=${uid}`}>
@@ -66,6 +51,9 @@ const App = () => {
           ) : (
             ""
           )}
+          <Route path={`/add${member}`} exact>
+            <AddMember />
+          </Route>
           <Route path="/events" exact>
             <Events />
           </Route>
@@ -73,7 +61,8 @@ const App = () => {
             <Rules />
           </Route>
           <Route path="/form" exact>
-            <LoginUserForm userUid={userUid} />
+            <LoginUserForm />
+            {/* <LoginUserForm userUid={userUid} /> */}
           </Route>
           <Route path="/" exact>
             <LandingPage />

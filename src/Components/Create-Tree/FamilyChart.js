@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import f3 from "family-chart";
-import data from "./data.json";
+// import data from "./data.json";
 import "./familyChart.css";
 import { useStateValue } from "../../StateManagement/StateProvider";
 

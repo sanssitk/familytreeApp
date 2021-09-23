@@ -1,55 +1,44 @@
-import React, { useState } from "react";
-import "./forms.css";
-import { useHistory, useLocation } from "react-router-dom";
-import { useStateValue } from "../../StateManagement/StateProvider";
-import { dbServices, storageServices } from "../../Services/firebaseServices";
+import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router";
+import { useStateValue } from "../StateManagement/StateProvider";
+import { dbServices, storageServices } from "../Services/firebaseServices";
+import { v4 as uuidv4 } from "uuid";
 
-const LoginUserForm = () => {
-  const location = useLocation();
-  const history = useHistory();
-  const [{ user, uid }, dispatch] = useStateValue();
-  const [fname, setFname] = useState(user?.displayName.split(" ")[0]);
-  const [lname, setLname] = useState(user?.displayName.split(" ")[0]);
+const AddMember = () => {
+  const [{ member, uid, nodeId }, dispatch] = useStateValue();
+  const history = useHistory;
+
+  const [fname, setFname] = useState("");
+  const [lname, setLname] = useState("");
   const [address, setAddress] = useState("");
   const [houseNo, setHouseNo] = useState("");
-  const [state, setState] = useState();
+  const [state, setState] = useState("");
   const [country, setCountry] = useState("");
-  const [gender, setGender] = useState();
   const [dob, setDob] = useState();
   const [phNumber, setPhNumber] = useState("");
   const [email, setEmail] = useState("");
   const [job, setJob] = useState("");
   const [fbImageUrl, setFbImageUrl] = useState();
+  const [memberId, setMemberId] = useState(uuidv4());
 
-  if (!location.state)
-    return (
-      <div
-        style={{
-          height: "100vh",
-          color: "white",
-          textAlign: "center",
-          margin: "auto auto",
-        }}
-      >
-        <h1>You already have data added</h1>
-      </div>
-    );
+  useEffect(() => setMemberId(uuidv4()), []);
 
-  const saveData = (url = null) => {
+  const saveFather = (url = null) => {
     const member = {
-      id: uid,
-      uid: uid,
+      id: memberId,
+      uid: "",
       rels: {
         father: "",
         mother: "",
+        children: [nodeId],
       },
       data: {
         birthday: dob.split("-")[2],
-        gender: gender,
+        gender: "M",
         firstName: fname,
         lastName: lname,
         birthDate: dob,
-        image: `${url ? url : user?.photoURL}`,
+        image: url,
         birthPlace: country,
         phoneNumber: phNumber,
         email: email,
@@ -57,17 +46,21 @@ const LoginUserForm = () => {
         address: `${address}-${houseNo}-${state}-${country}`,
       },
     };
+    const updateUserRelation = {
+      title: "father",
+      value: memberId,
+    };
     dbServices.addDB(member);
-    history.push("/");
+    dbServices.updateRel(uid, updateUserRelation);
   };
 
   const getImageUrl = (url) => {
     if (!url) return;
-    saveData(url);
+    saveFather(url);
   };
 
   const savePicture = (fbUrl) => {
-    storageServices.add(uid, fbUrl, getImageUrl);
+    storageServices.add(memberId, fbUrl, getImageUrl);
   };
 
   const handleFromSubmit = (e) => {
@@ -75,7 +68,7 @@ const LoginUserForm = () => {
     if (fbImageUrl) {
       savePicture(fbImageUrl);
     } else {
-      saveData();
+      saveFather();
     }
   };
 
@@ -86,14 +79,14 @@ const LoginUserForm = () => {
   };
 
   const handleDisableButton = () => {
-    if (!fname || !lname || !address || !state || !gender || !dob) {
+    if (!fname || !lname || !address || !state || !dob) {
       return "disabled";
     }
   };
 
   return (
     <form className="ui form">
-      <h4 className="ui dividing header"> जानकारी</h4>
+      <h4 className="ui dividing header"> ADD {member.toUpperCase()}</h4>
       <div className="required field">
         <label>Name</label>
         <div className="two fields">
@@ -102,7 +95,7 @@ const LoginUserForm = () => {
               type="text"
               name="firstname"
               onChange={(e) => setFname(e.target.value)}
-              placeholder={user?.displayName.split(" ")[0]}
+              placeholder="First Name"
             />
           </div>
           <div className="field">
@@ -110,7 +103,7 @@ const LoginUserForm = () => {
               type="text"
               name="lastname"
               onChange={(e) => setLname(e.target.value)}
-              placeholder={user?.displayName.split(" ")[1]}
+              placeholder="Last Name"
             />
           </div>
         </div>
@@ -172,12 +165,7 @@ const LoginUserForm = () => {
       <div className="four fields">
         <div className="required field">
           <label>Gender</label>
-          <select
-            onChange={(e) => setGender(e.target.value)}
-            value={gender}
-            className="ui fluid dropdown"
-          >
-            <option value="">Select Gender</option>
+          <select className="ui fluid dropdown" disabled>
             <option value="M">Male</option>
             <option value="F">Female</option>
           </select>
@@ -267,4 +255,4 @@ const LoginUserForm = () => {
   );
 };
 
-export default LoginUserForm;
+export default AddMember;

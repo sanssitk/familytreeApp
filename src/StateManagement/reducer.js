@@ -4,6 +4,7 @@ export const initialState = {
   user: null,
   uid: null,
   nodeId: null,
+  member: null,
 };
 
 const reducer = (state, action) => {
@@ -18,6 +19,11 @@ const reducer = (state, action) => {
       return {
         ...state,
         nodeId: action.nodeId,
+      };
+    case "ADD_MEMBER":
+      return {
+        ...state,
+        member: action.member,
       };
     default:
       return state;

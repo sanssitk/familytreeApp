@@ -5,6 +5,7 @@ export const initialState = {
   uid: null,
   nodeId: null,
   member: null,
+  fbKey: null,
 };
 
 const reducer = (state, action) => {
@@ -14,6 +15,11 @@ const reducer = (state, action) => {
         ...state,
         user: action.user,
         uid: action.uid,
+      };
+    case "FB_KEY":
+      return {
+        ...state,
+        fbKey: action.fbKey,
       };
     case "NODE_ID":
       return {

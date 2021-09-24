@@ -6,16 +6,31 @@ const dbRef = db.ref("relatives");
 const refId = uuidv4();
 
 // Firebase Database
+const getFbKey = (uid, callback) => {
+  dbRef
+    .orderByChild("uid")
+    .equalTo(uid)
+    .on("value", (snapshot) => {
+      const fbKey = Object.keys(snapshot.val())[0];
+      callback(fbKey);
+    });
+};
+
+const keyValue = (fbKey) => {
+  return db.ref(`relatives/${fbKey}`);
+};
+
 const readDB = () => {
   dbRef.on("value", (snapshot) => {
     const data = snapshot.val();
     return data;
   });
 };
+
 const addDB = (data) => {
   dbRef.push(data, (err) => {
     if (err) {
-      console.log(err);
+      throw new Error("Not able to add at this time, Try Again");
     } else {
       alert("Successfully added");
     }
@@ -120,8 +135,10 @@ const _delete = (key) => {
 export const dbServices = {
   readDB,
   addDB,
+  getFbKey,
   updateData,
   updateRel,
+  keyValue,
   delete: _deleteDB,
 };
 

@@ -38,29 +38,6 @@ const SideBar = () => {
       });
   }, [nodeId]);
 
-  const data = {
-    id: "12",
-    uid: uid,
-    rels: {
-      father: "",
-      mother: "",
-      spouses: [],
-      children: [],
-    },
-    data: {
-      address: "",
-      birthDate: "1987-13-3 AD",
-      birthPlace: "Nepal, Kathmandu",
-      email: "",
-      firstName: "Test",
-      gender: "F",
-      image: "",
-      jobDetails: "",
-      lastName: "Test",
-      phoneNumber: "7048904961",
-    },
-  };
-
   const handleCancelClick = () => {
     renderInfos();
     dispatch({
@@ -142,7 +119,7 @@ const SideBar = () => {
       dbServices.updateData(uid, address);
     }
     setDisableEdit(true);
-    return null;
+    setSaveActive(false);
   };
 
   const handleSave = (target) => {

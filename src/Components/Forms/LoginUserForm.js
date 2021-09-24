@@ -35,14 +35,19 @@ const LoginUserForm = () => {
       </div>
     );
 
+  const callback = (fbKey) => {
+    dispatch({
+      type: "FB_KEY",
+      fbkey: fbKey,
+    });
+  };
+
   const saveData = (url = null) => {
+    dbServices.getFbKey(uid, callback);
     const member = {
       id: uid,
       uid: uid,
-      rels: {
-        father: "",
-        mother: "",
-      },
+      rels: {},
       data: {
         birthday: dob.split("-")[2],
         gender: gender,

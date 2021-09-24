@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router";
 import { useStateValue } from "../StateManagement/StateProvider";
 import { dbServices, storageServices } from "../Services/firebaseServices";
 import { v4 as uuidv4 } from "uuid";
 
 const AddMember = () => {
   const [{ member, uid, nodeId }, dispatch] = useStateValue();
-  const history = useHistory;
 
   const [fname, setFname] = useState("");
   const [lname, setLname] = useState("");
@@ -18,13 +16,49 @@ const AddMember = () => {
   const [phNumber, setPhNumber] = useState("");
   const [email, setEmail] = useState("");
   const [job, setJob] = useState("");
+  const [gender, setGender] = useState(
+    member === "Father"
+      ? "M"
+      : member === "Mother"
+      ? "F"
+      : member === "Brother"
+      ? "M"
+      : member === "Sister"
+      ? "F"
+      : ""
+  );
   const [fbImageUrl, setFbImageUrl] = useState();
   const [memberId, setMemberId] = useState(uuidv4());
 
   useEffect(() => setMemberId(uuidv4()), []);
 
-  const saveFather = (url = null) => {
-    const member = {
+  // const buttonLists = [
+  //   "Spouses",
+  //   "Children",
+  //   "Father",
+  //   "Mother",
+  //   "Brother",
+  //   "Sister",
+  // ];
+
+  // if (member === "Spouses") {
+  //   return (rels = {
+  //     spouses: [...nodeId],
+  //   });
+  // }
+  // if (member === "Children") {
+  //   return (rels = {
+  //     father: nodeId,
+  //   });
+  // }
+  // if (member === "Father" || member === "Mother") {
+  //   return (rels = {
+  //     children: [...nodeId],
+  //   });
+  // }
+
+  const saveMember = (url = null) => {
+    const newMember = {
       id: memberId,
       uid: "",
       rels: {
@@ -50,13 +84,13 @@ const AddMember = () => {
       title: "father",
       value: memberId,
     };
-    dbServices.addDB(member);
+    dbServices.addDB(newMember);
     dbServices.updateRel(uid, updateUserRelation);
   };
 
   const getImageUrl = (url) => {
     if (!url) return;
-    saveFather(url);
+    saveMember(url);
   };
 
   const savePicture = (fbUrl) => {
@@ -68,7 +102,7 @@ const AddMember = () => {
     if (fbImageUrl) {
       savePicture(fbImageUrl);
     } else {
-      saveFather();
+      saveMember();
     }
   };
 
@@ -165,7 +199,14 @@ const AddMember = () => {
       <div className="four fields">
         <div className="required field">
           <label>Gender</label>
-          <select className="ui fluid dropdown" disabled>
+          <select
+            className="ui fluid dropdown"
+            disabled={
+              member === "Spouses" ? false : member == "Children" ? false : true
+            }
+            onChange={(e) => setGender(e.target.value)}
+            value={gender}
+          >
             <option value="M">Male</option>
             <option value="F">Female</option>
           </select>

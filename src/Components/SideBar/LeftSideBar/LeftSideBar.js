@@ -16,6 +16,7 @@ function LeftSideBar() {
         setEventDatas(snapshot.docs.map((doc) => doc.data()))
       );
   }, []);
+
   useEffect(() => {
     firestore
       .collection("rules")
@@ -23,9 +24,6 @@ function LeftSideBar() {
         setRules(snapshot.docs.map((doc) => doc.data()))
       );
   }, []);
-
-  // console.log(rules[0].Birthday);
-  console.log();
 
   if (!eventDatas || !rules) return <div>Loading...</div>;
 

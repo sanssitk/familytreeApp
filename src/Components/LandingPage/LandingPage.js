@@ -3,17 +3,26 @@ import FbButton from "../Buttons/FbButton";
 import { facebookProvider, auth } from "../../Provider/firebase";
 import { useStateValue } from "../../StateManagement/StateProvider";
 import { useHistory } from "react-router-dom";
+import { dbServices } from "../../Services/firebaseServices";
 import "./LandingPage.css";
 
 function LandingPage() {
   const history = useHistory();
-  const [{ user }, dispatch] = useStateValue();
+  const [{ user, uid }, dispatch] = useStateValue();
 
   useEffect(() => {
     if (user) {
       signIn(user);
+      dbServices.getFbKey(user.uid, callback);
     }
   }, [user]);
+
+  const callback = (key) => {
+    dispatch({
+      type: "FB_KEY",
+      fbKey: key,
+    });
+  };
 
   const signIn = (user) => {
     if (user) {

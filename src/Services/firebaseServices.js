@@ -21,10 +21,7 @@ const keyValue = (fbKey) => {
 };
 
 const readDB = () => {
-  dbRef.on("value", (snapshot) => {
-    const data = snapshot.val();
-    return data;
-  });
+  return dbRef;
 };
 
 const addDB = (data) => {

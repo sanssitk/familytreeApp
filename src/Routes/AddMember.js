@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router";
 import { useStateValue } from "../StateManagement/StateProvider";
 import { dbServices, storageServices } from "../Services/firebaseServices";
 import { v4 as uuidv4 } from "uuid";
 
 const AddMember = () => {
-  const [{ member, uid, nodeId }, dispatch] = useStateValue();
-
+  const history = useHistory();
+  const [{ member, uid, nodeId, fbKey }, dispatch] = useStateValue();
   const [fname, setFname] = useState("");
   const [lname, setLname] = useState("");
   const [address, setAddress] = useState("");
@@ -30,7 +31,19 @@ const AddMember = () => {
   const [fbImageUrl, setFbImageUrl] = useState();
   const [memberId, setMemberId] = useState(uuidv4());
 
-  useEffect(() => setMemberId(uuidv4()), []);
+  const [rels, setRels] = useState();
+
+  useEffect(() => {
+    dbServices
+      .readDB()
+      .child(fbKey)
+      .child("rels")
+      .on("value", (snapshot) => {
+        const relations = snapshot.val();
+        setRels(relations);
+      });
+    setMemberId(uuidv4());
+  }, []);
 
   // const buttonLists = [
   //   "Spouses",
@@ -41,51 +54,50 @@ const AddMember = () => {
   //   "Sister",
   // ];
 
-  // if (member === "Spouses") {
-  //   return (rels = {
-  //     spouses: [...nodeId],
-  //   });
-  // }
-  // if (member === "Children") {
-  //   return (rels = {
-  //     father: nodeId,
-  //   });
-  // }
-  // if (member === "Father" || member === "Mother") {
-  //   return (rels = {
-  //     children: [...nodeId],
-  //   });
-  // }
+  const manageRelation = () => {
+    if (member === "Spouses") {
+      if (rels.spouses) {
+        setRels(rels.spouses.push(`${nodeId}`));
+      } else {
+        setRels(rels.spouses[`${nodeId}`]);
+      }
+      return { ...rels, spouses: rels.spouses };
+    }
+    // if (member === "Children") {
+    //   return { ...rels, father: nodeId };
+    // }
+    // if (member === "Father" || member === "Mother") {
+    //   return { ...rels, children: [...nodeId] };
+    // }
+  };
 
   const saveMember = (url = null) => {
-    const newMember = {
-      id: memberId,
-      uid: "",
-      rels: {
-        father: "",
-        mother: "",
-        children: [nodeId],
-      },
-      data: {
-        birthday: dob.split("-")[2],
-        gender: "M",
-        firstName: fname,
-        lastName: lname,
-        birthDate: dob,
-        image: url,
-        birthPlace: country,
-        phoneNumber: phNumber,
-        email: email,
-        jobDetails: job,
-        address: `${address}-${houseNo}-${state}-${country}`,
-      },
-    };
-    const updateUserRelation = {
-      title: "father",
-      value: memberId,
-    };
-    dbServices.addDB(newMember);
-    dbServices.updateRel(uid, updateUserRelation);
+    console.log(manageRelation());
+    history.push("/");
+    // const newMember = {
+    //   id: memberId,
+    //   uid: "",
+    //   rels: manageRelation(),
+    //   data: {
+    //     birthday: dob.split("-")[2],
+    //     gender: "M",
+    //     firstName: fname,
+    //     lastName: lname,
+    //     birthDate: dob,
+    //     image: url,
+    //     birthPlace: country,
+    //     phoneNumber: phNumber,
+    //     email: email,
+    //     jobDetails: job,
+    //     address: `${address}-${houseNo}-${state}-${country}`,
+    //   },
+    // };
+    // const updateUserRelation = {
+    //   title: "father",
+    //   value: memberId,
+    // };
+    // dbServices.addDB(newMember);
+    // dbServices.updateRel(uid, updateUserRelation);
   };
 
   const getImageUrl = (url) => {

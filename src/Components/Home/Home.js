@@ -26,7 +26,7 @@ const Home = () => {
     return () => datalist.off();
   }, []);
 
-  if (!members)
+  if (!members) {
     return (
       <div className="ui segment loading">
         <div className="ui active transition visible inverted dimmer">
@@ -40,11 +40,12 @@ const Home = () => {
         />
       </div>
     );
+  }
 
   return (
     <div className="home">
       <LeftSideBar />
-      <FamilyChart minified={minified} members={members} />
+      <FamilyChart minified={minified} members={members} />;
       <SideBar />
     </div>
   );

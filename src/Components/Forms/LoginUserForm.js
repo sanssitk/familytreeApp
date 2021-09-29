@@ -43,7 +43,6 @@ const LoginUserForm = () => {
   };
 
   const saveData = (url = null) => {
-    dbServices.getFbKey(uid, callback);
     const member = {
       id: uid,
       uid: uid,
@@ -63,6 +62,11 @@ const LoginUserForm = () => {
       },
     };
     dbServices.addDB(member);
+    dbServices.getFbKey(uid, callback);
+    dispatch({
+      type: "NODE_ID",
+      nodeId: uid,
+    });
     history.push("/");
   };
 

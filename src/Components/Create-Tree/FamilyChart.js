@@ -3,12 +3,13 @@ import f3 from "family-chart";
 // import data from "./data.json";
 import "./familyChart.css";
 import { useStateValue } from "../../StateManagement/StateProvider";
+import { FeedLabel } from "semantic-ui-react";
 
 const FamilyChart = (treeProps) => {
   const [ref, setRef] = useState();
   const [store, setStore] = useState();
   const [id, setId] = useState();
-  const [, dispatch] = useStateValue();
+  const [{ members }, dispatch] = useStateValue();
 
   useEffect(() => {
     if (!ref) return;
@@ -46,7 +47,7 @@ const FamilyChart = (treeProps) => {
       return store;
     }
     document.querySelector(".main_svg").lastElementChild.remove();
-  }, [ref, treeProps]);
+  }, [ref, treeProps, members]);
 
   if (store) {
     store.state.cont
@@ -66,7 +67,30 @@ const FamilyChart = (treeProps) => {
       });
   }
 
-  return <div className="family-chart" ref={(e) => setRef(e)}></div>;
+  return treeProps.members.length > 0 ? (
+    <div className="family-chart" ref={(e) => setRef(e)}></div>
+  ) : (
+    <div className="family-chart">
+      <h2
+        className="ui header white"
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          color: "white",
+        }}
+      >
+        <i className="settings icon large" style={{ margin: "24px auto" }}></i>
+        <div
+          className="content"
+          style={{ textAlign: "center", lineHeight: "40px" }}
+        >
+          Welcome! Welcome!!! <br />
+          First Add Your self and then you can start adding your family members
+        </div>
+      </h2>
+    </div>
+  );
 };
 
 export default FamilyChart;

@@ -8,7 +8,7 @@ import { dbServices } from "../../../Services/firebaseServices";
 import AddButtons from "./AddButtons";
 
 const SideBar = () => {
-  const [{ nodeId, uid, user }, dispatch] = useStateValue();
+  const [{ nodeId, uid }, dispatch] = useStateValue();
   const [sideDetails, setSidedetails] = useState();
   const [disableEdit, setDisableEdit] = useState(true);
   const [saveActive, setSaveActive] = useState(false);
@@ -147,7 +147,9 @@ const SideBar = () => {
   return (
     <div
       className="rightSideBar"
-      style={{ transform: nodeId ? "translateX(0)" : "translateX(100%)" }}
+      style={{
+        transform: nodeId ? "translateX(0)" : "translateX(100%)",
+      }}
     >
       <div className="sidebarButton">
         <i className="angle left icon" onClick={handleCancelClick}></i>

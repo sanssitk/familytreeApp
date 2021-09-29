@@ -6,13 +6,15 @@ const dbRef = db.ref("relatives");
 const refId = uuidv4();
 
 // Firebase Database
-const getFbKey = (uid, callback) => {
+const getFbKey = (id, callback) => {
   dbRef
-    .orderByChild("uid")
-    .equalTo(uid)
+    .orderByChild("id")
+    .equalTo(id)
     .on("value", (snapshot) => {
-      const fbKey = Object.keys(snapshot.val())[0];
-      callback(fbKey);
+      if (snapshot.val()) {
+        const fbKey = Object.keys(snapshot.val())[0];
+        callback(fbKey);
+      }
     });
 };
 
@@ -34,18 +36,19 @@ const addDB = (data) => {
   });
 };
 
-const updateRel = (uid, body) => {
+const updateRel = (id, body) => {
   const { title, value } = body;
+  const titleRef = title.toLowerCase();
   dbRef
-    .orderByChild("uid")
-    .equalTo(uid)
+    .orderByChild("id")
+    .equalTo(id)
     .on("value", (snapshot) => {
       const data = snapshot.val();
       const key = Object.keys(data)[0];
       dbRef
         .child(key)
         .child("rels")
-        .update({ [title]: value }, (error) => {
+        .update({ [titleRef]: value }, (error) => {
           if (error) {
             return (
               <div class="ui warning message">

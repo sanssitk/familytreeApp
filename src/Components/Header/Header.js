@@ -81,7 +81,17 @@ const Header = () => {
         </Link>
       );
     } else {
-      return <img src={user.photoURL}></img>;
+      return (
+        <img
+          src={user.photoURL}
+          onClick={() =>
+            dispatch({
+              type: "NODE_ID",
+              nodeId: uid,
+            })
+          }
+        ></img>
+      );
     }
   };
 

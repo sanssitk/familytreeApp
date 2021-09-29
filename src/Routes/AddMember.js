@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import { useStateValue } from "../StateManagement/StateProvider";
 import { dbServices, storageServices } from "../Services/firebaseServices";
+import db from "../Provider/firebase";
 import { v4 as uuidv4 } from "uuid";
 
 const AddMember = () => {
@@ -30,74 +31,145 @@ const AddMember = () => {
   );
   const [fbImageUrl, setFbImageUrl] = useState();
   const [memberId, setMemberId] = useState(uuidv4());
-
   const [rels, setRels] = useState();
+  const [children, setChildren] = useState();
 
   useEffect(() => {
-    dbServices
-      .readDB()
-      .child(fbKey)
-      .child("rels")
-      .on("value", (snapshot) => {
-        const relations = snapshot.val();
-        setRels(relations);
-      });
+    fbKey &&
+      dbServices
+        .readDB()
+        .child(fbKey)
+        .child("rels")
+        .on("value", (snapshot) => {
+          const relations = snapshot.val();
+          setRels(relations);
+        });
     setMemberId(uuidv4());
   }, []);
 
-  // const buttonLists = [
-  //   "Spouses",
-  //   "Children",
-  //   "Father",
-  //   "Mother",
-  //   "Brother",
-  //   "Sister",
-  // ];
+  useEffect(() => {
+    if ((rels && member === "Brother") || (rels && member === "Sister")) {
+      db.ref("relatives")
+        .orderByChild("id")
+        .equalTo(rels.father)
+        .on("value", (snapshot) => {
+          let newChildrens;
+          let datas = snapshot.val();
+          for (let data in datas) {
+            const oldChildren = datas[data].rels.children;
+            newChildrens = oldChildren;
+            newChildrens.push(memberId);
+          }
+          setChildren(newChildrens);
+        });
+    }
+    return null;
+  }, [member, rels]);
 
   const manageRelation = () => {
-    if (member === "Spouses") {
-      if (rels.spouses) {
-        setRels(rels.spouses.push(`${nodeId}`));
+    if (member === "Brother" || member === "Sister") {
+      if (rels && "father" in rels) {
+        if ("mother" in rels) {
+          dbServices.updateRel(rels.father, {
+            title: "children",
+            value: children,
+          });
+          return {
+            father: `${rels.father}`,
+            mother: `${rels.mother}`,
+          };
+        } else {
+          alert("Add Mother First");
+        }
       } else {
-        setRels(rels.spouses[`${nodeId}`]);
+        alert("Add Father First");
       }
-      return { ...rels, spouses: rels.spouses };
     }
-    // if (member === "Children") {
-    //   return { ...rels, father: nodeId };
-    // }
-    // if (member === "Father" || member === "Mother") {
-    //   return { ...rels, children: [...nodeId] };
-    // }
+
+    if (member === "Spouses") {
+      if (rels && "spouses" in rels) {
+        dbServices.updateRel(uid, {
+          title: "spouses",
+          value: [...rels?.spouses, memberId],
+        });
+        return {
+          spouses: [`${nodeId}`],
+        };
+      } else {
+        return { spouses: [`${nodeId}`] };
+      }
+    }
+
+    if (member === "Father") {
+      if (rels && "mother" in rels) {
+        dbServices.updateRel(rels.mother, {
+          title: "spouses",
+          value: [memberId],
+        });
+        return {
+          spouses: [`${rels.mother}`],
+          children: [`${nodeId}`],
+        };
+      } else {
+        return { children: [`${nodeId}`] };
+      }
+    }
+    if (member === "Mother") {
+      if (rels && "father" in rels) {
+        dbServices.updateRel(rels.father, {
+          title: "spouses",
+          value: [memberId],
+        });
+        return {
+          spouses: [`${rels.father}`],
+          children: [`${nodeId}`],
+        };
+      } else {
+        return { children: [`${nodeId}`] };
+      }
+    }
+
+    if (member === "Children") {
+      return { father: `${nodeId}` };
+    }
   };
 
   const saveMember = (url = null) => {
-    console.log(manageRelation());
+    const newMember = {
+      id: memberId,
+      uid: "",
+      rels: manageRelation(),
+      data: {
+        birthday: dob.split("-")[2],
+        gender: gender,
+        firstName: fname,
+        lastName: lname,
+        birthDate: dob,
+        image: url,
+        birthPlace: country,
+        phoneNumber: phNumber,
+        email: email,
+        jobDetails: job,
+        address: `${address}-${houseNo}-${state}-${country}`,
+      },
+    };
+
+    const convertArray = () => {
+      if (member === "Father" || member === "Mother") {
+        return memberId;
+      } else {
+        return [memberId];
+      }
+    };
+    const updateUserRelation = {
+      title: member,
+      value: convertArray(),
+    };
+
+    dbServices.addDB(newMember);
+    if (member != "Spouses" || member != "Brother")
+      dbServices.updateRel(uid, updateUserRelation);
     history.push("/");
-    // const newMember = {
-    //   id: memberId,
-    //   uid: "",
-    //   rels: manageRelation(),
-    //   data: {
-    //     birthday: dob.split("-")[2],
-    //     gender: "M",
-    //     firstName: fname,
-    //     lastName: lname,
-    //     birthDate: dob,
-    //     image: url,
-    //     birthPlace: country,
-    //     phoneNumber: phNumber,
-    //     email: email,
-    //     jobDetails: job,
-    //     address: `${address}-${houseNo}-${state}-${country}`,
-    //   },
-    // };
-    // const updateUserRelation = {
-    //   title: "father",
-    //   value: memberId,
-    // };
-    // dbServices.addDB(newMember);
-    // dbServices.updateRel(uid, updateUserRelation);
   };
 
   const getImageUrl = (url) => {
@@ -120,7 +192,11 @@ const AddMember = () => {
 
   const onFileChange = (e) => {
     if (e.target.files[0]) {
-      setFbImageUrl(e.target.files[0]);
+      if (e.target.files[0].size > 40000) {
+        alert("File size too big, try small size photo");
+      } else {
+        setFbImageUrl(e.target.files[0]);
+      }
     }
   };
 

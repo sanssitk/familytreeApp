@@ -6,6 +6,7 @@ export const initialState = {
   nodeId: null,
   member: null,
   fbKey: null,
+  isOpen: false,
 };
 
 const reducer = (state, action) => {
@@ -30,6 +31,11 @@ const reducer = (state, action) => {
       return {
         ...state,
         member: action.member,
+      };
+    case "BAR_OPEN":
+      return {
+        ...state,
+        isOpen: action.isOpen,
       };
     default:
       return state;

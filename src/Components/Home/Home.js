@@ -44,8 +44,8 @@ const Home = () => {
 
   return (
     <div className="home">
-      <LeftSideBar />
-      <FamilyChart minified={minified} members={members} />;
+    <LeftSideBar /> 
+      <FamilyChart minified={minified} members={members} />
       <SideBar />
     </div>
   );

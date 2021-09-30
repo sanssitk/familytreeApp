@@ -4,6 +4,7 @@ import { useStateValue } from "../StateManagement/StateProvider";
 import { dbServices, storageServices } from "../Services/firebaseServices";
 import db from "../Provider/firebase";
 import { v4 as uuidv4 } from "uuid";
+import Resizer from "react-image-file-resizer";
 
 const AddMember = () => {
   const history = useHistory();
@@ -190,9 +191,54 @@ const AddMember = () => {
     }
   };
 
-  const onFileChange = (e) => {
+  const dataURIToBlob = (dataURI) => {
+    const splitDataURI = dataURI.split(",");
+    const byteString =
+      splitDataURI[0].indexOf("base64") >= 0
+        ? atob(splitDataURI[1])
+        : decodeURI(splitDataURI[1]);
+    const mimeString = splitDataURI[0].split(":")[1].split(";")[0];
+    const ia = new Uint8Array(byteString.length);
+    for (let i = 0; i < byteString.length; i++)
+      ia[i] = byteString.charCodeAt(i);
+    return new Blob([ia], { type: mimeString });
+  };
+
+  const resizeFile = (file) =>
+    new Promise((resolve) => {
+      Resizer.imageFileResizer(
+        file,
+        300,
+        400,
+        "JPG",
+        80,
+        0,
+        (uri) => {
+          resolve(uri);
+        },
+        "base64"
+      );
+    });
+
+  // work on auto resize image uploaded
+  const onFileChange = async (e) => {
     if (e.target.files[0]) {
-      if (e.target.files[0].size > 40000) {
+      if (e.target.files[0].size > 30000) {
+        const file = e.target.files[0];
+        const image = await resizeFile(file);
+        console.log(image);
+        // const newFile = dataURIToBlob(image);
+        // const formData = new FormData();
+        // formData.append("image", newFile);
+        // const res = await fetch(
+        //   "https://run.mocky.io/v3/c5189845-2a93-49aa-85c7-70bc64e8af90",
+        //   {
+        //     method: "POST",
+        //     body: formData,
+        //   }
+        // );
+        // const data = await res.text();
+        // console.log(data);
         alert("File size too big, try small size photo");
       } else {
         setFbImageUrl(e.target.files[0]);

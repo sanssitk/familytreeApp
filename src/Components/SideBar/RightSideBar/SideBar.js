@@ -7,6 +7,7 @@ import ProfilePicture from "./ProfilePicture";
 import { dbServices } from "../../../Services/firebaseServices";
 import AddButtons from "./AddButtons";
 
+
 const SideBar = () => {
   const [{ nodeId, uid }, dispatch] = useStateValue();
   const [sideDetails, setSidedetails] = useState();
@@ -15,6 +16,7 @@ const SideBar = () => {
 
   const [address, setAddress] = useState();
   const [job, setJob] = useState();
+  const [transfrom, setTransform] = useState("translateX(100%)")
 
   const buttonLists = [
     "Spouses",
@@ -36,6 +38,20 @@ const SideBar = () => {
           setSidedetails(data.val());
         });
       });
+  }, [nodeId]);
+  useEffect(() => {
+    if (nodeId && window.innerWidth > 768){
+      setTransform("translateX(0)")
+    }
+    if (!nodeId && window.innerWidth > 768){
+      setTransform("translateX(100%)")
+    }
+    if (nodeId && window.innerWidth < 768){
+      setTransform("translateX(-81vw)")
+    }
+    if (!nodeId && window.innerWidth < 768){
+      setTransform("translateX(100%)")
+    }
   }, [nodeId]);
 
   const handleCancelClick = () => {
@@ -149,8 +165,8 @@ const SideBar = () => {
       className="rightSideBar"
       style={{
         transform: nodeId ? "translateX(0)" : "translateX(100%)",
-      }}
-    >
+      } }
+    > 
       <div className="sidebarButton">
         <i className="angle left icon" onClick={handleCancelClick}></i>
         <h1>Details</h1>

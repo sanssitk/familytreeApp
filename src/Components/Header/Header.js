@@ -11,6 +11,8 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { Icon } from "semantic-ui-react";
 import db from "../../Provider/firebase";
+import { FaRegWindowClose, FaBars } from "react-icons/fa";
+import { Nav } from "./NavBarElements";
 
 const Header = () => {
   const [userUid, setUserUid] = useState();
@@ -20,6 +22,7 @@ const Header = () => {
   const history = useHistory();
   const [updater, setUpdate] = useState(true);
   const location = useLocation();
+  const [navListOpen, setNavListOpen] = useState(false);
 
   useEffect(() => {
     db.ref("relatives")
@@ -120,6 +123,66 @@ const Header = () => {
 
   return (
     <div className="header">
+      <div className="userName">
+        {renderAddMemberIcon()}
+        <div>{user.displayName}</div>
+      </div>
+
+      <div className="centerArea">
+        <div className="ui fluid category search">
+          <div className="ui icon input">
+            <input
+              className="prompt"
+              type="text"
+              placeholder="Search names..."
+            />
+            <i className="search icon"></i>
+          </div>
+        </div>
+
+        <div className="links">
+          <Nav>
+            <ul className={navListOpen ? "mobileMenu" : "navList"}>
+              <Link to="/">
+                <li>Home</li>
+              </Link>
+              <Link to="/events">
+                <li>Events</li>
+              </Link>
+              <Link to="/rules">
+                <li>Rules</li>
+              </Link>
+              <Link to="/rules">
+                <li>
+                  <FbButton text={"Sign Out"} buttonClicked={signOutClicked} />
+                  {modal()}
+                </li>
+              </Link>
+            </ul>
+            <div className="mobileButton">
+              {navListOpen ? (
+                <FaRegWindowClose
+                  color="white"
+                  fontFamily="1.5rem"
+                  onClick={() => setNavListOpen(false)}
+                />
+              ) : (
+                <FaBars
+                  color="white"
+                  fontFamily="1.5rem"
+                  onClick={() => setNavListOpen(true)}
+                />
+              )}
+            </div>
+          </Nav>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+{
+  /* <Nav>
       <div className="leftArea">
         <div className="ui fluid category search">
           <div className="ui icon input">
@@ -133,25 +196,27 @@ const Header = () => {
         </div>
       </div>
 
-      <div className="centerArea">
-        <div className="userName">
-          {renderAddMemberIcon()}
-          <div>{user.displayName}</div>
-        </div>
-
-        <div className="links">
-          <Link to="/">Home</Link>
-          <Link to="/events">Events</Link>
-          <Link to="/rules">Rules</Link>
-        </div>
+      <div className="userName">
+        {renderAddMemberIcon()}
+        <div>{user.displayName}</div>
       </div>
 
-      <div className="rightArea">
-        <FbButton text={"Sign Out"} buttonClicked={signOutClicked} />
-        {modal()}
-      </div>
-    </div>
-  );
-};
-
+      <Bars />
+      <NavMenu className="links">
+        <NavLink to="/" activeStyle>
+          Home
+        </NavLink>
+        <NavLink to="/events" activeStyle>
+          Events
+        </NavLink>
+        <NavLink to="/rules" activeStyle>
+          Rules
+        </NavLink>
+        <NavLink to="/">
+          <FbButton text={"Sign Out"} buttonClicked={signOutClicked} />
+          {modal()}
+        </NavLink>
+      </NavMenu>
+    </Nav> */
+}
 export default Header;

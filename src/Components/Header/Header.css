@@ -1,58 +1,139 @@
-.app > .header {
+.app>.header {
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
-    padding: 16px 24px;
+    padding: 0 36px;
     background-color: #192A40;
-    color: white;
+}
+
+.userName>img {
+    width: 36px;
+    margin-right: 1rem;
+}
+
+.userName>a {
+    margin-right: 1rem;
+}
+
+.ui.fluid.category.search {
+    flex: 1;
+}
+
+.ui.icon.input {
+    width: 100%;
 }
 
 .ui.search .prompt {
     border-radius: 8px;
 }
 
-.leftArea,
-.rightArea {
+.leftArea {
     flex: 0.15;
 }
 
+.userName {
+    flex: 0.25;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #15cdfc;
+}
+
 .centerArea {
-    flex: 0.6;
-    margin: 0 50px;
+    flex: 1;
+    margin-left: 26px;
 
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.userName{
+.navList {
+    display: flex;
+    justify-content: flex-end;
+    list-style: none;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.navList>a {
+    color: #15cdfc;
+    font-size: 1.5rem;
+    padding: 12px 30px;
+    transition: all 0.2s ease;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.navList>a:hover {
+    background-color: #15cdfc;
+    color: #fff;
+}
+
+.navList>a:last-child:hover {
+    background-color: unset;
+    color: unset;
+}
+
+.mobileButton {
     display: flex;
     align-items: center;
-
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: lightblue;
+    font-size: x-large;
+    display: none;
 }
 
-.userName > img {
-    width: 36px;
-    margin-right: 1rem;
-}
+@media screen and (max-width: 768px) {
+    .app>.header {
+        flex-direction: column;
+        padding-top: 24px;
+        align-items: flex-start;
+    }
 
-.userName > a {
-    margin-right: 1rem;
-}
+    .navList {
+        display: none;
+    }
 
-.links{
-    font-size: 1rem;
-    font-weight: 600;
-}
+    .centerArea {
+        margin: 18px 0;
+        flex-direction: column;
+        align-items: flex-start;
+    }
 
-.links > a {
-    margin-left: 50px;
-    padding-left: 24px;
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: white;
+    .ui.fluid.category.search {
+        width: 80vw;
+    }
+
+    .mobileButton {
+        display: block;
+        position: absolute;
+        top: 26px;
+        right: 14vw
+    }
+
+    .mobileMenu {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        list-style: none;
+        background-color: #192A40;
+        left: 0;
+        bottom: 0;
+        top: 75px;        
+        width: 100%;
+        z-index: 10;
+
+        transition: all 0.4s ease-in-out;
+    }
+
+    .mobileMenu>a {
+        text-align: center;
+        font-size: 2rem;
+        color: #fff;
+        padding: 40px;
+        width: 100%;
+        transition: all 0.4s ease-out;
+    }
 }

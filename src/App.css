@@ -5,5 +5,15 @@
 }
 
 .app {
+    overflow: hidden;
     background-color: #0a131f;
+}
+
+.app>* {
+    scrollbar-width: none;
+    overflow-y: scroll;
+}
+
+.app>*::-webkit-scrollbar {
+    display: none;
 }

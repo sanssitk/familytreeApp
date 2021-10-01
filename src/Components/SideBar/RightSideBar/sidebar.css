@@ -26,8 +26,6 @@
     transition: transform 0.3s ease;
 }
 
-
-
 .rightSideBar>nav {
     margin: 24px;
 }
@@ -91,7 +89,6 @@
     font-size: 1rem;
 }
 
-
 /* Buttons */
 .editButtons {
     margin: 24px;
@@ -115,4 +112,12 @@
 
 .ui.button.animated.fade.primary {
     margin: 4px auto;
+}
+
+@media screen and (max-width: 500px) {
+    .rightSideBar {
+        width: 100%;
+        transition: all 0.2s ease;
+    }
+
 }

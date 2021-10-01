@@ -33,3 +33,28 @@
 .rules>p {
     line-height: 1.5rem;
 }
+
+@media screen and (max-width: 500px) {
+
+    .family-chart {
+        margin: 0;
+        width: 100%;
+    }
+
+    .leftsideBar {
+        width: 100vw;
+        height: 100%;
+        margin: 0;
+        border-radius: 0;
+    }
+
+    .ui.cards {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 auto;
+    }
+
+    .ui.card.events {
+        margin-right: 16px;
+    }
+}

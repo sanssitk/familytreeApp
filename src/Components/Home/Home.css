@@ -2,6 +2,13 @@
     display: flex;
 }
 
-.ui.segment.loading{
+.ui.segment.loading {
     height: 100vh;
+}
+
+
+@media screen and (max-width: 500px) {
+    .home {
+        flex-direction: column-reverse;
+    }
 }

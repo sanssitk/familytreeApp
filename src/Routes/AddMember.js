@@ -4,7 +4,7 @@ import { useStateValue } from "../StateManagement/StateProvider";
 import { dbServices, storageServices } from "../Services/firebaseServices";
 import db from "../Provider/firebase";
 import { v4 as uuidv4 } from "uuid";
-import Resizer from "react-image-file-resizer";
+import Compress from "compress.js";
 
 const AddMember = () => {
   const history = useHistory();
@@ -49,11 +49,12 @@ const AddMember = () => {
   }, []);
 
   useEffect(() => {
+    if (!rels && member !== ("Brother" || "Sister")) return;
     if ((rels && member === "Brother") || (rels && member === "Sister")) {
       db.ref("relatives")
         .orderByChild("id")
         .equalTo(rels.father)
-        .on("value", (snapshot) => {
+        .once("value", (snapshot) => {
           let newChildrens;
           let datas = snapshot.val();
           for (let data in datas) {
@@ -131,7 +132,7 @@ const AddMember = () => {
     }
 
     if (member === "Children") {
-      return { father: `${nodeId}` };
+      return { father: `${nodeId}`, mother: `${rels.spouses[0]}` };
     }
   };
 
@@ -190,56 +191,23 @@ const AddMember = () => {
       saveMember();
     }
   };
-
-  const dataURIToBlob = (dataURI) => {
-    const splitDataURI = dataURI.split(",");
-    const byteString =
-      splitDataURI[0].indexOf("base64") >= 0
-        ? atob(splitDataURI[1])
-        : decodeURI(splitDataURI[1]);
-    const mimeString = splitDataURI[0].split(":")[1].split(";")[0];
-    const ia = new Uint8Array(byteString.length);
-    for (let i = 0; i < byteString.length; i++)
-      ia[i] = byteString.charCodeAt(i);
-    return new Blob([ia], { type: mimeString });
-  };
-
-  const resizeFile = (file) =>
-    new Promise((resolve) => {
-      Resizer.imageFileResizer(
-        file,
-        300,
-        400,
-        "JPG",
-        80,
-        0,
-        (uri) => {
-          resolve(uri);
-        },
-        "base64"
-      );
-    });
-
-  // work on auto resize image uploaded
   const onFileChange = async (e) => {
     if (e.target.files[0]) {
       if (e.target.files[0].size > 30000) {
+        const compress = new Compress();
         const file = e.target.files[0];
-        const image = await resizeFile(file);
-        console.log(image);
-        // const newFile = dataURIToBlob(image);
-        // const formData = new FormData();
-        // formData.append("image", newFile);
-        // const res = await fetch(
-        //   "https://run.mocky.io/v3/c5189845-2a93-49aa-85c7-70bc64e8af90",
-        //   {
-        //     method: "POST",
-        //     body: formData,
-        //   }
-        // );
-        // const data = await res.text();
-        // console.log(data);
-        alert("File size too big, try small size photo");
+        const resizedImage = await compress.compress([file], {
+          size: 0.03, // the max size in MB, defaults to 2MB
+          quality: 1, // the quality of the image, max is 1,
+          maxWidth: 700, // the max width of the output image, defaults to 1920px
+          maxHeight: 700, // the max height of the output image, defaults to 1920px
+          resize: true, // defaults to true, set false if you do not want to resize the image width and height
+        });
+        const img = resizedImage[0];
+        const base64str = img.data;
+        const imgExt = img.ext;
+        const resizedFile = Compress.convertBase64ToFile(base64str, imgExt);
+        setFbImageUrl(resizedFile);
       } else {
         setFbImageUrl(e.target.files[0]);
       }

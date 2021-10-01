@@ -143,16 +143,16 @@ const Header = () => {
         <div className="links">
           <Nav>
             <ul className={navListOpen ? "mobileMenu" : "navList"}>
-              <Link to="/">
+              <Link to="/" onClick={() => setNavListOpen(false)}>
                 <li>Home</li>
               </Link>
-              <Link to="/events">
+              <Link to="/events" onClick={() => setNavListOpen(false)}>
                 <li>Events</li>
               </Link>
-              <Link to="/rules">
+              <Link to="/rules" onClick={() => setNavListOpen(false)}>
                 <li>Rules</li>
               </Link>
-              <Link to="/rules">
+              <Link to="/" onClick={() => setNavListOpen(false)}>
                 <li>
                   <FbButton text={"Sign Out"} buttonClicked={signOutClicked} />
                   {modal()}

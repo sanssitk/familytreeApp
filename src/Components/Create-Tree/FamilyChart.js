@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import f3 from "family-chart";
-// import data from "./data.json";
 import "./familyChart.css";
 import { useStateValue } from "../../StateManagement/StateProvider";
-import { FeedLabel } from "semantic-ui-react";
 
 const FamilyChart = (treeProps) => {
   const [ref, setRef] = useState();

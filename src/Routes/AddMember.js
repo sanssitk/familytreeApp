@@ -124,15 +124,19 @@ const AddMember = () => {
         });
         return {
           spouses: [`${rels.father}`],
-          children: [`${nodeId}`],
         };
       } else {
-        return { children: [`${nodeId}`] };
+        alert("Add father first");
+        // return { children: [`${nodeId}`] };
       }
     }
 
     if (member === "Children") {
-      return { father: `${nodeId}`, mother: `${rels.spouses[0]}` };
+      if (rels.spouses && nodeId) {
+        return { father: `${nodeId}`, mother: `${rels.spouses[0]}` };
+      } else {
+        alert("add wife first");
+      }
     }
   };
 

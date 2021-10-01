@@ -1,6 +1,17 @@
 
---- Responsive -- Done
-Auto resize Photo.
-Facebook live setting.
+Responsive -- Done
+Auto resize Photo. -- Done
+Facebook live setting. ---- Done
+
+1. Make Separate component for file uploader.
+2. check why add father is asking even if already added.
+1. If Female, No able to add new members
+2. On first log in, check if you already available.
+3. First add Father, Mother, Spouses, Childre, Brother, Sister
+4. Remove React Icon from nav bar.
+5. design footer with @copyright
+6. Check for firebase firestore security rules.
+
+
 Dynamic Events.
 Static Rules.

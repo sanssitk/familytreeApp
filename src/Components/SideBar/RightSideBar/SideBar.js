@@ -173,12 +173,11 @@ const SideBar = () => {
 
   return (
     <div
-      className="rightSideBar"
+      className={nodeId ? "active rightSideBar" : "rightSideBar"}
       style={{
         transform: nodeId ? "translateX(0)" : "translateX(100%)",
       }}
     >
-       
       <div className="sidebarButton">
         <i className="angle left icon" onClick={handleCancelClick}></i>
         <h1>Details</h1>

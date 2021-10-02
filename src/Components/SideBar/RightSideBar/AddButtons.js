@@ -6,12 +6,18 @@ import { Button, Header, Icon, Modal } from "semantic-ui-react";
 
 const AddButtons = ({ buttonlist }) => {
   const [open, setOpen] = useState(false);
-  const [{ fbKey }, dispatch] = useStateValue();
+  const [{ uid }, dispatch] = useStateValue();
 
   let history = useHistory();
 
-  const checkFather = (value) => {
-    if (!value || value == "") {
+  const checkFather = (relations) => {
+    if (!relations.rels.father) {
+      dispatch({
+        type: "ADD_MEMBER",
+        member: buttonlist,
+      });
+      history.push(`/add${buttonlist}`);
+    } else if (relations.rels.father == "") {
       dispatch({
         type: "ADD_MEMBER",
         member: buttonlist,
@@ -20,6 +26,7 @@ const AddButtons = ({ buttonlist }) => {
     } else {
       setOpen(true);
     }
+    if (open) setOpen(false);
   };
 
   const handleAddButtonClicked = (e) => {
@@ -32,12 +39,8 @@ const AddButtons = ({ buttonlist }) => {
       });
       history.push(`/add${e.currentTarget.id}`);
     } else {
-      dbServices.keyValue(fbKey).on("value", (snapshot) => {
-        const relsValue = snapshot.child("rels/father").val();
-        checkFather(relsValue);
-      });
+      dbServices.readDB(uid, checkFather);
     }
-    if (open) setOpen(false);
   };
 
   const renderNotAllowedModal = () => {

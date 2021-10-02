@@ -4,9 +4,12 @@ import { useStateValue } from "../../../StateManagement/StateProvider";
 import db from "../../../Provider/firebase";
 import DetailsComponent from "./DetailsComponent";
 import ProfilePicture from "./ProfilePicture";
-import { dbServices } from "../../../Services/firebaseServices";
+import UploadFile from "../../FileUploader/UploadFile";
+import {
+  dbServices,
+  storageServices,
+} from "../../../Services/firebaseServices";
 import AddButtons from "./AddButtons";
-
 
 const SideBar = () => {
   const [{ nodeId, uid }, dispatch] = useStateValue();
@@ -16,7 +19,7 @@ const SideBar = () => {
 
   const [address, setAddress] = useState();
   const [job, setJob] = useState();
-  const [transfrom, setTransform] = useState("translateX(100%)")
+  const [fbImageUrl, setFbImageUrl] = useState();
 
   const buttonLists = [
     "Spouses",
@@ -38,20 +41,6 @@ const SideBar = () => {
           setSidedetails(data.val());
         });
       });
-  }, [nodeId]);
-  useEffect(() => {
-    if (nodeId && window.innerWidth > 768){
-      setTransform("translateX(0)")
-    }
-    if (!nodeId && window.innerWidth > 768){
-      setTransform("translateX(100%)")
-    }
-    if (nodeId && window.innerWidth < 768){
-      setTransform("translateX(-81vw)")
-    }
-    if (!nodeId && window.innerWidth < 768){
-      setTransform("translateX(100%)")
-    }
   }, [nodeId]);
 
   const handleCancelClick = () => {
@@ -92,6 +81,11 @@ const SideBar = () => {
     });
   };
 
+  const savePicture = (fbUrl) => {
+    setFbImageUrl(fbUrl);
+    setSaveActive(true);
+  };
+
   const renderButtons = () => {
     if (sideDetails && uid === sideDetails.uid) {
       return (
@@ -100,6 +94,7 @@ const SideBar = () => {
             {buttonLists.map((buttonlist, i) => (
               <AddButtons key={i} buttonlist={buttonlist} />
             ))}
+            {!disableEdit && <UploadFile callback={savePicture} />}
           </div>
 
           <div className="fluid ui buttons">
@@ -127,12 +122,28 @@ const SideBar = () => {
     }
   };
 
+  const getImageUrl = (url) => {
+    try {
+      // This code is adding only NOT Updating Existing One and Deleting Old if exiting.
+      const data = {
+        title: "image",
+        value: url,
+      };
+      dbServices.updateData(uid, data);
+    } catch {
+      alert("Image cannot be uploaded at this time..");
+    }
+  };
+
   const handleSaveUpload = () => {
     if (job) {
       dbServices.updateData(uid, job);
     }
     if (address) {
       dbServices.updateData(uid, address);
+    }
+    if (fbImageUrl) {
+      storageServices.add(uid, fbImageUrl, getImageUrl);
     }
     setDisableEdit(true);
     setSaveActive(false);
@@ -165,8 +176,9 @@ const SideBar = () => {
       className="rightSideBar"
       style={{
         transform: nodeId ? "translateX(0)" : "translateX(100%)",
-      } }
-    > 
+      }}
+    >
+       
       <div className="sidebarButton">
         <i className="angle left icon" onClick={handleCancelClick}></i>
         <h1>Details</h1>

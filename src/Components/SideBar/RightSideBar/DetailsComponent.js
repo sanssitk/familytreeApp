@@ -29,7 +29,7 @@ const DetailsComponent = ({ title, text, toggleDisable, handleChange }) => {
               ? true
               : false
           }
-        />
+        />        
       </div>
     </div>
   );

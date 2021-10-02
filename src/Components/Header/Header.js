@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./Header.css";
 import FbButton from "../Buttons/FbButton";
 import { useStateValue } from "../../StateManagement/StateProvider";
@@ -10,9 +10,9 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { Icon } from "semantic-ui-react";
-import db from "../../Provider/firebase";
 import { FaRegWindowClose, FaBars } from "react-icons/fa";
 import { Nav } from "./NavBarElements";
+import { dbServices } from "../../Services/firebaseServices";
 
 const Header = () => {
   const [userUid, setUserUid] = useState();
@@ -20,25 +20,15 @@ const Header = () => {
   const [open, setOpen] = useState(false);
   const [sureSignOff, setSureSignOff] = useState(false);
   const history = useHistory();
-  const [updater, setUpdate] = useState(true);
-  const location = useLocation();
   const [navListOpen, setNavListOpen] = useState(false);
 
   useEffect(() => {
-    db.ref("relatives")
-      .orderByChild("uid")
-      .equalTo(uid)
-      .once("value", (snapshot) => {
-        if (snapshot.exists()) {
-          const uUid = snapshot.val();
-          setUserUid(uUid);
-        }
-      });
-  }, [updater]);
-
-  useEffect(() => {
-    setUpdate(!updater);
-  }, [location]);
+    if (!uid) return;
+    const callback = (data) => {
+      setUserUid(data);
+    };
+    dbServices.readDB(uid, callback);
+  }, []);
 
   useEffect(() => {
     if (sureSignOff === true) {
@@ -86,7 +76,7 @@ const Header = () => {
     } else {
       return (
         <img
-          src={user.photoURL}
+          src={userUid.data?.image ? userUid.data?.image : user.photoURL}
           onClick={() =>
             dispatch({
               type: "NODE_ID",

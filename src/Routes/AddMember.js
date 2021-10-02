@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import { useStateValue } from "../StateManagement/StateProvider";
 import { dbServices, storageServices } from "../Services/firebaseServices";
+import UploadFile from "../Components/FileUploader/UploadFile";
 import db from "../Provider/firebase";
 import { v4 as uuidv4 } from "uuid";
-import Compress from "compress.js";
 
 const AddMember = () => {
   const history = useHistory();
@@ -36,15 +36,10 @@ const AddMember = () => {
   const [children, setChildren] = useState();
 
   useEffect(() => {
-    fbKey &&
-      dbServices
-        .readDB()
-        .child(fbKey)
-        .child("rels")
-        .on("value", (snapshot) => {
-          const relations = snapshot.val();
-          setRels(relations);
-        });
+    const callback = (relations) => {
+      setRels(relations.rels);
+    };
+    fbKey && dbServices.readDB(uid, callback);
     setMemberId(uuidv4());
   }, []);
 
@@ -179,42 +174,24 @@ const AddMember = () => {
   };
 
   const getImageUrl = (url) => {
-    if (!url) return;
-    saveMember(url);
+    try {
+      saveMember(url);
+    } catch {
+      alert("Image cannot be uploaded at this time..");
+      saveMember();
+    }
   };
 
   const savePicture = (fbUrl) => {
-    storageServices.add(memberId, fbUrl, getImageUrl);
+    setFbImageUrl(fbUrl);
   };
 
   const handleFromSubmit = (e) => {
     e.preventDefault();
     if (fbImageUrl) {
-      savePicture(fbImageUrl);
+      storageServices.add(memberId, fbImageUrl, getImageUrl);
     } else {
       saveMember();
-    }
-  };
-  const onFileChange = async (e) => {
-    if (e.target.files[0]) {
-      if (e.target.files[0].size > 30000) {
-        const compress = new Compress();
-        const file = e.target.files[0];
-        const resizedImage = await compress.compress([file], {
-          size: 0.03, // the max size in MB, defaults to 2MB
-          quality: 1, // the quality of the image, max is 1,
-          maxWidth: 700, // the max width of the output image, defaults to 1920px
-          maxHeight: 700, // the max height of the output image, defaults to 1920px
-          resize: true, // defaults to true, set false if you do not want to resize the image width and height
-        });
-        const img = resizedImage[0];
-        const base64str = img.data;
-        const imgExt = img.ext;
-        const resizedFile = Compress.convertBase64ToFile(base64str, imgExt);
-        setFbImageUrl(resizedFile);
-      } else {
-        setFbImageUrl(e.target.files[0]);
-      }
     }
   };
 
@@ -367,19 +344,7 @@ const AddMember = () => {
       <div className="two fields">
         <div className="field">
           <div className="ui fluid ">
-            <input
-              onChange={onFileChange}
-              type="file"
-              className="inputfile"
-              id="embedpollfileinput"
-            />
-            <label
-              htmlFor="embedpollfileinput"
-              className="ui huge green right floated button"
-            >
-              <i className="ui upload icon"></i>
-              Upload image
-            </label>
+            <UploadFile callback={savePicture} />
           </div>
         </div>
 

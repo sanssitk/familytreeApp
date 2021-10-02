@@ -1,9 +1,6 @@
 import db, { storage } from "../Provider/firebase";
-import { v4 as uuidv4 } from "uuid";
 
 const dbRef = db.ref("relatives");
-
-const refId = uuidv4();
 
 // Firebase Database
 const getFbKey = (id, callback) => {
@@ -22,8 +19,17 @@ const keyValue = (fbKey) => {
   return db.ref(`relatives/${fbKey}`);
 };
 
-const readDB = () => {
-  return dbRef;
+const readDB = (uid, callback = null) => {
+  dbRef
+    .orderByChild("uid")
+    .equalTo(uid)
+    .once("value", (snapshot) => {
+      if (snapshot.exists()) {
+        snapshot.forEach((datas) => {
+          callback(datas.val());
+        });
+      }
+    });
 };
 
 const addDB = (data) => {

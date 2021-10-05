@@ -19,7 +19,7 @@ const keyValue = (fbKey) => {
   return db.ref(`relatives/${fbKey}`);
 };
 
-const readDB = (uid, callback = null) => {
+const readDB = (uid, callback) => {
   dbRef
     .orderByChild("uid")
     .equalTo(uid)
@@ -28,6 +28,8 @@ const readDB = (uid, callback = null) => {
         snapshot.forEach((datas) => {
           callback(datas.val());
         });
+      } else {
+        callback(null);
       }
     });
 };

@@ -16,12 +16,18 @@ const App = () => {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
+      if (user && uid) {
         // the user is logged in......
         dispatch({
           type: "SET_USER",
           user: user,
           uid: user.uid,
+        });
+      } else if (user && !uid) {
+        dispatch({
+          type: "SET_USER",
+          user: user,
+          uid: null,
         });
       } else {
         // user is logged out......
@@ -62,7 +68,6 @@ const App = () => {
           </Route>
           <Route path="/form" exact>
             <LoginUserForm />
-            {/* <LoginUserForm userUid={userUid} /> */}
           </Route>
           <Route path="/" exact>
             <LandingPage />

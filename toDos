@@ -4,10 +4,11 @@ Auto resize Photo. -- Done
 Facebook live setting. ---- Done
 Make Separate component for file uploader. ---- Done
 check why add father is asking even if already added. ---- Done
+4. Sign up page. ---- Done
+
 
 3. Security question on first login in.
 1. If Female, No able to add new members.
-4. Sign up page.
 2. On first log in, check if you already available.
 3. First add Father, Mother, Spouses, Childre, Brother, Sister.
 4. Remove React Icon from nav bar.

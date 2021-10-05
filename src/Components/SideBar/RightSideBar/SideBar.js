@@ -87,7 +87,7 @@ const SideBar = () => {
   };
 
   const renderButtons = () => {
-    if (sideDetails && uid === sideDetails.uid) {
+    if (sideDetails && uid === sideDetails?.uid) {
       return (
         <div className="editButtons">
           <div className="three ui buttons segment">

@@ -23,12 +23,17 @@ const Header = () => {
   const [navListOpen, setNavListOpen] = useState(false);
 
   useEffect(() => {
+    let mounted = true;
     if (!uid) return;
     const callback = (data) => {
       setUserUid(data);
     };
-    dbServices.readDB(uid, callback);
-  }, []);
+    if (mounted) {
+      dbServices.readDB(uid, callback);
+    }
+
+    return () => (mounted = false);
+  }, [uid]);
 
   useEffect(() => {
     if (sureSignOff === true) {
@@ -80,7 +85,7 @@ const Header = () => {
           onClick={() =>
             dispatch({
               type: "NODE_ID",
-              nodeId: uid,
+              nodeId: userUid.id,
             })
           }
         ></img>
@@ -133,7 +138,12 @@ const Header = () => {
         <div className="links">
           <Nav>
             <ul className={navListOpen ? "mobileMenu" : "navList"}>
-              <Link to="/" onClick={() => setNavListOpen(false)}>
+              <Link
+                to={
+                  user ? `/home/${user.displayName.split(" ")[0]}=${uid}` : "/"
+                }
+                onClick={() => setNavListOpen(false)}
+              >
                 <li>Home</li>
               </Link>
               <Link to="/events" onClick={() => setNavListOpen(false)}>
@@ -171,42 +181,4 @@ const Header = () => {
   );
 };
 
-{
-  /* <Nav>
-      <div className="leftArea">
-        <div className="ui fluid category search">
-          <div className="ui icon input">
-            <input
-              className="prompt"
-              type="text"
-              placeholder="Search countries..."
-            />
-            <i className="search icon"></i>
-          </div>
-        </div>
-      </div>
-
-      <div className="userName">
-        {renderAddMemberIcon()}
-        <div>{user.displayName}</div>
-      </div>
-
-      <Bars />
-      <NavMenu className="links">
-        <NavLink to="/" activeStyle>
-          Home
-        </NavLink>
-        <NavLink to="/events" activeStyle>
-          Events
-        </NavLink>
-        <NavLink to="/rules" activeStyle>
-          Rules
-        </NavLink>
-        <NavLink to="/">
-          <FbButton text={"Sign Out"} buttonClicked={signOutClicked} />
-          {modal()}
-        </NavLink>
-      </NavMenu>
-    </Nav> */
-}
 export default Header;

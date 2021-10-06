@@ -1,0 +1,8 @@
+.footer {
+    width: 97vw;
+    margin: 0 auto;
+    text-align: center;
+    border-top: 1px solid #192A40;
+    padding: 30px;
+    color: grey;
+}

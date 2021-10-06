@@ -12,6 +12,8 @@ function LeftSideBar() {
   useEffect(() => {
     firestore
       .collection("events")
+      .orderBy("postOn")
+      .limitToLast(2)
       .onSnapshot((snapshot) =>
         setEventDatas(snapshot.docs.map((doc) => doc.data()))
       );
@@ -29,13 +31,16 @@ function LeftSideBar() {
 
   return (
     <div className="leftsideBar">
-      <h1>Events</h1>
+      <h1>
+        Events<span>See All Events</span>
+      </h1>
+
       <Card.Group>
         {eventDatas.map((eventData, index) => (
           <Events key={index} eventData={eventData} />
         ))}
       </Card.Group>
-      <h1>Birthday</h1>
+      <h1>Rules</h1>
       {rules.map((rule) =>
         rule.Birthday.map((data, i) => <Rules key={i} rule={data} />)
       )}

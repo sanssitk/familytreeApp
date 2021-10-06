@@ -11,16 +11,14 @@ import {
 } from "../../../Services/firebaseServices";
 import AddButtons from "./AddButtons";
 
-const SideBar = () => {
+export default React.memo(function SideBar() {
   const [{ nodeId, uid }, dispatch] = useStateValue();
   const [sideDetails, setSidedetails] = useState();
   const [disableEdit, setDisableEdit] = useState(true);
   const [saveActive, setSaveActive] = useState(false);
-
   const [address, setAddress] = useState();
   const [job, setJob] = useState();
   const [fbImageUrl, setFbImageUrl] = useState();
-
   const buttonLists = [
     "Spouses",
     "Children",
@@ -31,16 +29,21 @@ const SideBar = () => {
   ];
 
   useEffect(() => {
+    let mounted = true;
     if (!nodeId) return;
-    const getData = db.ref("relatives");
-    getData
-      .orderByChild("id")
-      .equalTo(nodeId)
-      .on("value", (snapshot) => {
-        snapshot.forEach((data) => {
-          setSidedetails(data.val());
+    if (mounted) {
+      const getData = db.ref("relatives");
+      getData
+        .orderByChild("id")
+        .equalTo(nodeId)
+        .limitToFirst(1)
+        .on("value", (snapshot) => {
+          snapshot.forEach((data) => {
+            setSidedetails(data.val());
+          });
         });
-      });
+    }
+    return () => (mounted = false);
   }, [nodeId]);
 
   const handleCancelClick = () => {
@@ -84,42 +87,6 @@ const SideBar = () => {
   const savePicture = (fbUrl) => {
     setFbImageUrl(fbUrl);
     setSaveActive(true);
-  };
-
-  const renderButtons = () => {
-    if (sideDetails && uid === sideDetails?.uid) {
-      return (
-        <div className="editButtons">
-          <div className="three ui buttons segment">
-            {buttonLists.map((buttonlist, i) => (
-              <AddButtons key={i} buttonlist={buttonlist} />
-            ))}
-            {!disableEdit && <UploadFile callback={savePicture} />}
-          </div>
-
-          <div className="fluid ui buttons">
-            <button
-              onClick={() => setDisableEdit(false)}
-              className="ui blue button"
-            >
-              <i className="icon user"></i>
-              Edit Profile
-            </button>
-            <div className="or"></div>
-            <button className="ui red button" onClick={handleCancelClick}>
-              Cancel
-            </button>
-            <div className="or"></div>
-            <button
-              onClick={handleSaveUpload}
-              className={`ui positive button ${saveActive ? "" : "disabled"}`}
-            >
-              Save
-            </button>
-          </div>
-        </div>
-      );
-    }
   };
 
   const getImageUrl = (url) => {
@@ -171,6 +138,48 @@ const SideBar = () => {
     }
   };
 
+  const renderButtons = () => {
+    if (
+      sideDetails &&
+      uid === sideDetails?.uid &&
+      sideDetails?.data.gender !== "F"
+    ) {
+      return (
+        <div className="editButtons">
+          <div className="three ui buttons segment">
+            {buttonLists.map((buttonlist, i) => (
+              <AddButtons key={i} buttonlist={buttonlist} />
+            ))}
+            {!disableEdit && <UploadFile callback={savePicture} />}
+          </div>
+
+          <div className="fluid ui buttons">
+            <button
+              onClick={() => setDisableEdit(false)}
+              className="ui blue button"
+            >
+              <i className="icon user"></i>
+              Edit Profile
+            </button>
+            <div className="or"></div>
+            <button className="ui red button" onClick={handleCancelClick}>
+              Cancel
+            </button>
+            <div className="or"></div>
+            <button
+              onClick={handleSaveUpload}
+              className={`ui positive button ${saveActive ? "" : "disabled"}`}
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      );
+    } else {
+      return "";
+    }
+  };
+
   return (
     <div
       className={nodeId ? "active rightSideBar" : "rightSideBar"}
@@ -188,6 +197,10 @@ const SideBar = () => {
       {renderButtons()}
     </div>
   );
-};
+});
 
-export default SideBar;
+// const SideBar = () => {
+
+// };
+
+// export default SideBar;

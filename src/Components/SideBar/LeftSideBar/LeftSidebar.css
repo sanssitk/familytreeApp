@@ -1,11 +1,21 @@
 .leftsideBar {
-    height: 100vh;
+    height: 100%;
     width: 19vw;
     background-color: #000408;
     margin: 2rem;
     border-radius: 2rem;
     color: white;
     padding: 24px;
+}
+.leftsideBar>h1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+.leftsideBar>h1>span {
+    font-size: 1rem;
+    color: aqua;
+    cursor: pointer;
 }
 
 .ui.card,

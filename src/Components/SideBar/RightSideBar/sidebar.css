@@ -19,7 +19,7 @@
 
 /* Profile Container */
 .rightSideBar {
-    height: 100%;
+    height: calc(100vh - 100px);
     width: 19vw;
     background-color: #0e3d7a;
     color: white;
@@ -127,13 +127,15 @@
         position: absolute;
         top: 140px;
         right: -100%;
+        display: none;
         transition: all 0.3s ease;
     }
 
     .active.rightSideBar {
-        height: 100%;
+        height: calc(100vh + 100%);
         top: 140px;
         right: 0;
+        display: block;
         z-index: 10;
         transition: all 0.3s ease;
     }

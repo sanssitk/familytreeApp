@@ -1,5 +1,5 @@
 import "./App.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import { useStateValue } from "./StateManagement/StateProvider";
 import { auth } from "./Provider/firebase";
@@ -10,24 +10,20 @@ import Home from "./Components/Home/Home";
 import Events from "./Routes/Events";
 import Rules from "./Routes/Rules";
 import AddMember from "./Routes/AddMember";
+import Footer from "./Components/Footer/Footer"
 
 const App = () => {
   const [{ user, uid, member }, dispatch] = useStateValue();
+  const [newMember, setNewMember] = useState();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user && uid) {
+      if (user) {
         // the user is logged in......
         dispatch({
           type: "SET_USER",
           user: user,
           uid: user.uid,
-        });
-      } else if (user && !uid) {
-        dispatch({
-          type: "SET_USER",
-          user: user,
-          uid: null,
         });
       } else {
         // user is logged out......
@@ -45,13 +41,19 @@ const App = () => {
     };
   }, []);
 
+  const newUser = (newUser) => {
+    if (newUser) {
+      setNewMember(newUser);
+    }
+  };
+
   return (
     <Router>
       <div className="app">
-        {user ? <Header /> : ""}
+        {user ? <Header newMember={newMember} /> : ""}
         <Switch>
           {user ? (
-            <Route path={`/home/${user.displayName.split(" ")[0]}=${uid}`}>
+            <Route path={`/home/${user.displayName.split(" ")[0]}=${user.uid}`}>
               <Home />
             </Route>
           ) : (
@@ -70,9 +72,10 @@ const App = () => {
             <LoginUserForm />
           </Route>
           <Route path="/" exact>
-            <LandingPage />
+            <LandingPage newUser={newUser} />
           </Route>
         </Switch>
+        {user ? <Footer /> : ""}
       </div>
     </Router>
   );

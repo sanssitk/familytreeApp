@@ -42,12 +42,14 @@ const Home = () => {
     );
   }
 
-  console.log();
-
   return (
     <div className="home">
       <LeftSideBar /> 
-      {members?.length > 1 ? <FamilyChart minified={minified} members={members} /> : "Add Your Family Members"}
+      {members?.length > 1 ? (
+        <FamilyChart minified={minified} members={members} />
+      ) : (
+        "Add Your Family Members"
+      )}
       <SideBar />
     </div>
   );

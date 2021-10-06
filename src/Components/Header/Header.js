@@ -14,13 +14,28 @@ import { FaRegWindowClose, FaBars } from "react-icons/fa";
 import { Nav } from "./NavBarElements";
 import { dbServices } from "../../Services/firebaseServices";
 
-const Header = () => {
+const Header = ({ newMember }) => {
   const [userUid, setUserUid] = useState();
   const [{ user, uid }, dispatch] = useStateValue();
   const [open, setOpen] = useState(false);
   const [sureSignOff, setSureSignOff] = useState(false);
   const history = useHistory();
   const [navListOpen, setNavListOpen] = useState(false);
+  const [nodeClicked, setNodeClicked] = useState(false);
+
+  useEffect(() => {
+    if (nodeClicked && userUid) {
+      dispatch({
+        type: "NODE_ID",
+        nodeId: userUid.id,
+      });
+    } else {
+      dispatch({
+        type: "NODE_ID",
+        nodeId: null,
+      });
+    }
+  }, [nodeClicked]);
 
   useEffect(() => {
     let mounted = true;
@@ -62,7 +77,7 @@ const Header = () => {
   };
 
   const renderAddMemberIcon = () => {
-    if (!userUid) {
+    if (!userUid && !newMember) {
       return (
         <Link
           to={{
@@ -81,13 +96,14 @@ const Header = () => {
     } else {
       return (
         <img
-          src={userUid.data?.image ? userUid.data?.image : user.photoURL}
-          onClick={() =>
-            dispatch({
-              type: "NODE_ID",
-              nodeId: userUid.id,
-            })
+          src={
+            userUid
+              ? userUid.data?.image
+              : newMember
+              ? newMember.photoURL
+              : user.photoURL
           }
+          onClick={() => setNodeClicked(!nodeClicked)}
         ></img>
       );
     }

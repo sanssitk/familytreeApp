@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 import { Icon } from "semantic-ui-react";
 import "./LandingPage.css";
 
-function LandingPage() {
+function LandingPage({ newUser }) {
   const history = useHistory();
   const [{ user }, dispatch] = useStateValue();
   const [open, setOpen] = useState(false);
@@ -86,11 +86,7 @@ function LandingPage() {
       query.once("child_added", (snapshot) => {
         snapshot.ref.update({ ...snapshot.val(), uid: userUID.uid });
       });
-      dispatch({
-        type: "SET_USER",
-        user: userUID,
-        uid: userUID.uid,
-      });
+      newUser(userUID);
       history.push(`/home/${userUID.displayName.split(" ")[0]}=${userUID.uid}`);
       setOpen(false);
     }

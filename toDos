@@ -9,10 +9,9 @@ Remove React Icon from nav bar. ---- Done
 Check for first user after assining self, header not rendering again. ---- Done
 CHeck why sideBar is rendering multiple times.---- Done
 4. design footer with @copyright. ---- Done
+3. First add Father, Mother, Spouses, Children, Brother, Sister. ---- Done
 
-3. First add Father, Mother, Spouses, Children, Brother, Sister.
-
-
-5. Check for firebase firestore security rules.
+1. Check why sidebar details info is not change after node change
+2. Check for firebase firestore security rules.
 Dynamic Events.
 Static Rules.

@@ -19,7 +19,7 @@ const ProfilePicture = ({ sideDetails, renderInfos }) => {
             <h4>Email: {sideDetails?.data.email}</h4>
           </div>
         </div>
-        {renderInfos()}
+        {renderInfos(sideDetails)}
       </nav>
     );
   }

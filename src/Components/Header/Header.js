@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Redirect } from "react-router-dom";
 import { Link } from "react-router-dom";
 import "./Header.css";
 import FbButton from "../Buttons/FbButton";
@@ -72,7 +73,8 @@ const Header = ({ newMember }) => {
     setSureSignOff(true);
     setOpen(false);
   };
-  const signOutClicked = () => {
+  const signOutClicked = (e) => {
+    e.preventDefault();
     setOpen(true);
   };
 
@@ -109,11 +111,18 @@ const Header = ({ newMember }) => {
     }
   };
 
+  const handleOutClicke = (type) => {
+    if (type) {
+      window.history.back();
+      setOpen(false);
+    }
+  };
+
   const modal = () => {
     return (
       <Dialog
         open={open}
-        onClose={handleSignOut}
+        onClose={handleOutClicke}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -121,7 +130,13 @@ const Header = ({ newMember }) => {
           {"Do you really want to sign Off?"}
         </DialogTitle>
         <DialogActions>
-          <Button onClick={() => setOpen(false)} color="primary">
+          <Button
+            onClick={(e) => {
+              e.preventDefault();
+              setOpen(false);
+            }}
+            color="primary"
+          >
             Cancel
           </Button>
           <Button onClick={handleSignOut} color="primary" autoFocus>

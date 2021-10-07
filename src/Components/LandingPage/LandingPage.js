@@ -178,7 +178,7 @@ function LandingPage({ newUser }) {
   return (
     <div className="landingPage">
       <img src="/favicon.ico" alt="logo" height="100vw" />
-      <h1 style={{ color: "white" }}>Shrestha APP</h1>
+      <h1 style={{ color: "white", fontSize: "3rem" }}>श्रेष्ठ परिवार </h1>
       <FbButton text="Login with Facebook" buttonClicked={logInClicked} />
       {open && allMembers ? renderModal() : ""}
     </div>

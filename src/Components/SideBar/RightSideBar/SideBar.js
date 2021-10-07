@@ -44,20 +44,10 @@ export default React.memo(function SideBar() {
         });
     }
     return () => (mounted = false);
-  }, [nodeId]);
+  }, [nodeId]);  
 
-  const handleCancelClick = () => {
-    renderInfos();
-    dispatch({
-      type: "NODE_ID",
-      nodeId: null,
-    });
-    setSidedetails(null);
-    setDisableEdit(true);
-  };
-
-  const renderInfos = () => {
-    const datas = sideDetails?.data;
+  const renderInfos = (details) => {
+    const datas = details?.data;
     const lists = [];
     for (const property in datas) {
       lists.push({ title: property, text: datas[property] });
@@ -84,14 +74,23 @@ export default React.memo(function SideBar() {
     });
   };
 
+  const handleCancelClick = () => {
+    renderInfos();
+    dispatch({
+      type: "NODE_ID",
+      nodeId: null,
+    });
+    setSidedetails(null);
+    setDisableEdit(true);
+  };
+
   const savePicture = (fbUrl) => {
     setFbImageUrl(fbUrl);
     setSaveActive(true);
   };
 
   const getImageUrl = (url) => {
-    try {
-      // This code is adding only NOT Updating Existing One and Deleting Old if exiting.
+    try {     
       const data = {
         title: "image",
         value: url,
@@ -198,9 +197,3 @@ export default React.memo(function SideBar() {
     </div>
   );
 });
-
-// const SideBar = () => {
-
-// };
-
-// export default SideBar;

@@ -1,7 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const DetailsComponent = ({ title, text, toggleDisable, handleChange }) => {
   const [value, setValue] = useState(text);
+
+  useEffect(() => {
+    setValue(text);
+  }, [text]);
 
   return (
     <div className="ui large userMoreInfo">
@@ -29,7 +33,7 @@ const DetailsComponent = ({ title, text, toggleDisable, handleChange }) => {
               ? true
               : false
           }
-        />        
+        />
       </div>
     </div>
   );

@@ -8,10 +8,15 @@ On first log in, check if you already available. ---- Done
 Remove React Icon from nav bar. ---- Done
 Check for first user after assining self, header not rendering again. ---- Done
 CHeck why sideBar is rendering multiple times.---- Done
-4. design footer with @copyright. ---- Done
-3. First add Father, Mother, Spouses, Children, Brother, Sister. ---- Done
+design footer with @copyright. ---- Done
+First add Father, Mother, Spouses, Children, Brother, Sister. ---- Done
+Check why sidebar details info is not change after node change ---- Done
 
-1. Check why sidebar details info is not change after node change
+
+Add Fathers father
+firsttime modal outside click handler
+Claim Father
+
 2. Check for firebase firestore security rules.
 Dynamic Events.
 Static Rules.

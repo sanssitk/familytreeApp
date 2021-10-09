@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./forms.css";
 import { useHistory, useLocation } from "react-router-dom";
 import { useStateValue } from "../../StateManagement/StateProvider";
 import { dbServices, storageServices } from "../../Services/firebaseServices";
+import db from "../../Provider/firebase";
+import { data } from "browserslist";
 
 const LoginUserForm = () => {
   const location = useLocation();
   const history = useHistory();
-  const [{ user, uid }, dispatch] = useStateValue();
+  const [{ user, uid, member, nodeId }, dispatch] = useStateValue();
   const [fname, setFname] = useState(user?.displayName.split(" ")[0]);
   const [lname, setLname] = useState(user?.displayName.split(" ")[0]);
   const [address, setAddress] = useState("");
@@ -20,6 +22,11 @@ const LoginUserForm = () => {
   const [email, setEmail] = useState("");
   const [job, setJob] = useState("");
   const [fbImageUrl, setFbImageUrl] = useState();
+  const [parents, setParents] = useState();
+
+  useEffect(() => {
+    setParents(nodeId);
+  }, [nodeId, member]);
 
   if (!location.state)
     return (
@@ -42,11 +49,42 @@ const LoginUserForm = () => {
     });
   };
 
+  const updateFather = () => {
+    db.ref("relatives")
+      .orderByChild("id")
+      .equalTo(parents[0])
+      .once("value", (snapshot) => {
+        snapshot.forEach((datas) => {
+          datas.forEach((items) => {
+            if (items.hasChild("children")) {
+              const childQuery = items.child("children");
+              childQuery.ref.update([...childQuery.val(), uid], (err) =>
+                console.log(err)
+              );
+            }
+          });
+        });
+      });
+    // const body = { title: "children", value: uid };
+    // dbServices.updateRel(parents[0], body);
+  };
+
+  const handleRelations = () => {
+    if (member === "Children" && parents) {
+      const father = parents[0];
+      const mother = parents[1];
+      updateFather();
+      return { father: `${father}`, mother: `${mother}` };
+    } else {
+      return {};
+    }
+  };
+
   const saveData = (url = null) => {
-    const member = {
+    const newUser = {
       id: uid,
       uid: uid,
-      rels: {},
+      rels: handleRelations(),
       data: {
         birthday: dob.split("-")[2],
         gender: gender,
@@ -61,11 +99,15 @@ const LoginUserForm = () => {
         address: `${address}-${houseNo}-${state}-${country}`,
       },
     };
-    dbServices.addDB(member);
+    dbServices.addDB(newUser);
     dbServices.getFbKey(uid, callback);
     dispatch({
       type: "NODE_ID",
       nodeId: uid,
+    });
+    dispatch({
+      type: "ADD_MEMBER",
+      member: null,
     });
     history.push("/");
   };

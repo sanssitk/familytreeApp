@@ -12,18 +12,17 @@ import "./LandingPage.css";
 import styled, { keyframes } from "styled-components";
 import { FcConferenceCall } from "react-icons/fc";
 
-{
-  /* <img src="/favicon.ico" alt="logo" /> */
-}
-
 function LandingPage({ newUser }) {
   const history = useHistory();
   const [{ user }, dispatch] = useStateValue();
   const [open, setOpen] = useState(false);
-  const [allMembers, setAllMembers] = useState([]);
-  const [userSelection, setUserSelection] = useState(null);
+  const [secondOpen, setSecondOpen] = useState(false);
   const [userUID, setUserUID] = useState();
   const [userSelected, setUserSelected] = useState(true);
+  const [allMembers, setAllMembers] = useState([]);
+  const [userSelection, setUserSelection] = useState(null);
+  const [allFathers, setAllfathers] = useState([]);
+  const [fatherSelection, setFatherSelection] = useState(null);
 
   const LOGO_SIZE = "200px";
   const DURATION = "0.7s";
@@ -82,20 +81,6 @@ function LandingPage({ newUser }) {
     animation-iteration-count: infinite;
   `;
 
-  // useEffect(() => {
-  //   if (user) {
-  //     signIn(user);
-  //     dbServices.getFbKey(user.uid, callback);
-  //   }
-  // }, [user]);
-
-  // const callback = (key) => {
-  //   dispatch({
-  //     type: "FB_KEY",
-  //     fbKey: key,
-  //   });
-  // };
-
   const signIn = (user) => {
     const callback = (datas) => {
       if (datas) {
@@ -111,13 +96,18 @@ function LandingPage({ newUser }) {
           .get()
           .then((datas) => {
             let memCol = [];
+            let fatherCol = [];
             datas.forEach((data) => {
               let userdata = data.val();
               if (!userdata.uid) {
                 memCol.push(userdata);
+                if (userdata.data.gender == "M") {
+                  fatherCol.push(userdata);
+                }
               }
             });
             setAllMembers(memCol);
+            setAllfathers(fatherCol);
             setUserUID(user);
           });
         setOpen(true);
@@ -155,6 +145,35 @@ function LandingPage({ newUser }) {
     }
   };
 
+  const handleFatherSelected = () => {
+    if (fatherSelection && user.uid) {
+      let query = async () => {
+        let items = await db
+          .ref("relatives")
+          .orderByChild("id")
+          .equalTo(fatherSelection)
+          .once("value");
+        return items;
+      };
+      query().then((snapshot) => {
+        let mother = "";
+        snapshot.forEach((datas) => {
+          mother = datas.val().rels.spouses[0];
+        });
+        dispatch({
+          type: "ADD_MEMBER",
+          member: "Children",
+        });
+        dispatch({
+          type: "NODE_ID",
+          nodeId: [fatherSelection, mother],
+        });
+      });
+      setSecondOpen(false);
+      setOpen(false);
+    }
+  };
+
   const renderModal = () => {
     return (
       <Modal
@@ -163,22 +182,13 @@ function LandingPage({ newUser }) {
         open={open}
         trigger={<Button>Show Modal</Button>}
       >
+        {/*************** firstModal ***************/}
         <Modal.Header>
           Select if you are in the list?
           <Modal.Actions>
-            <Link
-              to={{
-                pathname: "/form",
-                state: {
-                  isUserUid: true,
-                },
-              }}
-              onClick={() => setOpen(false)}
-            >
-              <Button onClick={() => setOpen(false)} color="blue">
-                <Icon name="add user" /> सूचीमा छैन
-              </Button>
-            </Link>
+            <Button onClick={() => setSecondOpen(true)} color="blue">
+              <Icon name="add user" /> सूचीमा छैन
+            </Button>
             <Button
               onClick={handleSaveClicked}
               positive
@@ -188,7 +198,6 @@ function LandingPage({ newUser }) {
             </Button>
           </Modal.Actions>
         </Modal.Header>
-
         <Modal.Content>
           {allMembers.map((mem) => (
             <div
@@ -215,25 +224,111 @@ function LandingPage({ newUser }) {
             </div>
           ))}
         </Modal.Content>
-
         <Modal.Actions>
-          <Link
-            to={{
-              pathname: "/form",
-              state: {
-                isUserUid: true,
-              },
-            }}
-            onClick={() => setOpen(false)}
-          >
-            <Button onClick={() => setOpen(false)} color="blue">
-              <Icon name="add user" /> सूचीमा छैन
-            </Button>
-          </Link>
+          <Button onClick={() => setSecondOpen(true)} color="blue">
+            <Icon name="add user" /> सूचीमा छैन
+          </Button>
           <Button onClick={handleSaveClicked} positive disabled={userSelected}>
             छानेकोलाइ सुरक्षित
           </Button>
         </Modal.Actions>
+        {/*************** secondModal ***************/}
+        <Modal
+          onClose={() => setSecondOpen(false)}
+          open={secondOpen}
+          size="small"
+        >
+          <Modal.Header>के तपाईंको बुवा सुचीमा हुनुहुन्छ ? </Modal.Header>
+          <Modal.Actions>
+            <Link
+              to={{
+                pathname: "/form",
+                state: {
+                  isUserUid: true,
+                },
+              }}
+              onClick={() => {
+                setSecondOpen(false);
+                setOpen(false);
+              }}
+            >
+              <Button color="blue">
+                <Icon name="add user" /> सूचीमा छैन
+              </Button>
+            </Link>
+            <Link
+              to={{
+                pathname: "/form",
+                state: {
+                  isUserUid: true,
+                },
+              }}
+              onClick={() => {
+                handleFatherSelected();
+                setSecondOpen(false);
+                setOpen(false);
+              }}
+            >
+              <Button
+                icon="plus"
+                content="All Done"
+                positive
+                disabled={userSelected}
+              >
+                छानेकोलाइ सुरक्षित
+              </Button>
+            </Link>
+          </Modal.Actions>
+          <Modal.Content>
+            {allFathers.map((father) => (
+              <div
+                key={father.id}
+                id={father.id}
+                className={
+                  father.id === fatherSelection ? "easeUserActive" : "eachUser"
+                }
+                onClick={(e) => {
+                  setFatherSelection(e.currentTarget.id);
+                  setUserSelected(false);
+                }}
+              >
+                <div
+                  className="userImage"
+                  style={{ backgroundImage: `url(${father.data.image})` }}
+                ></div>
+                <Modal.Description>
+                  <p>
+                    {father.data.firstName} {father.data.lastName}
+                  </p>
+                  <p>{father.data.address}</p>
+                </Modal.Description>
+              </div>
+            ))}
+          </Modal.Content>
+          <Modal.Actions>
+            <Link
+              to={{
+                pathname: "/form",
+                state: {
+                  isUserUid: true,
+                },
+              }}
+              onClick={() => setOpen(false)}
+            >
+              <Button color="blue">
+                <Icon name="add user" /> सूचीमा छैन
+              </Button>
+            </Link>
+            <Button
+              icon="plus"
+              content="All Done"
+              positive
+              disabled={userSelected}
+            >
+              छानेकोलाइ सुरक्षित
+            </Button>
+          </Modal.Actions>
+        </Modal>
       </Modal>
     );
   };

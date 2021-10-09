@@ -10,6 +10,7 @@ import {
   storageServices,
 } from "../../../Services/firebaseServices";
 import AddButtons from "./AddButtons";
+import { v4 as uuidv4 } from "uuid";
 
 export default React.memo(function SideBar() {
   const [{ nodeId, uid }, dispatch] = useStateValue();
@@ -44,7 +45,7 @@ export default React.memo(function SideBar() {
         });
     }
     return () => (mounted = false);
-  }, [nodeId]);  
+  }, [nodeId]);
 
   const renderInfos = (details) => {
     const datas = details?.data;
@@ -90,7 +91,7 @@ export default React.memo(function SideBar() {
   };
 
   const getImageUrl = (url) => {
-    try {     
+    try {
       const data = {
         title: "image",
         value: url,
@@ -179,6 +180,35 @@ export default React.memo(function SideBar() {
     }
   };
 
+  // dummy path
+  // const saveMember = () => {
+  //   const newMember = {
+  //     id: uuidv4(),
+  //     uid: "",
+  //     rels: {
+  //       // spouses: ["4905b61f-5540-4840-831f-b95af66b4d3d"],
+  //       // children: [""],
+  //       // Goma Shrestha Katuwal
+  //       father: "b0efb939-bccb-413f-b2ee-4bd6a5d91161",
+  //       mother: "8aa2a9af-4b50-4c9c-b4b6-6043d094e81e",
+  //     },
+  //     data: {
+  //       birthday: "1922-07-17",
+  //       gender: "F",
+  //       firstName: "Goma Shrestha",
+  //       lastName: "Katuwal",
+  //       birthDate: "1922-07-17",
+  //       image: "",
+  //       birthPlace: "Jhapa",
+  //       phoneNumber: "N/A",
+  //       email: "N/A",
+  //       jobDetails: "house wife",
+  //       address: "Itahari",
+  //     },
+  //   };
+  //   dbServices.addDB(newMember);
+  // };
+
   return (
     <div
       className={nodeId ? "active rightSideBar" : "rightSideBar"}
@@ -194,6 +224,9 @@ export default React.memo(function SideBar() {
         <ProfilePicture sideDetails={sideDetails} renderInfos={renderInfos} />
       )}
       {renderButtons()}
+      {/* <button className="dummy" onClick={saveMember}>
+        DUMMY
+      </button> */}
     </div>
   );
 });

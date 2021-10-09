@@ -24,6 +24,8 @@ const FamilyChart = (treeProps) => {
     }
   }, [id]);
 
+  console.log(f3);
+
   useEffect(() => {
     if (!ref) return;
     if (!store) {
@@ -32,13 +34,13 @@ const FamilyChart = (treeProps) => {
           cont: ref,
           card_display: [
             (d) => `${d.data.firstName} ${d.data.lastName}` || "",
-            (d) => `Phone: ${d.data.phoneNumber}` || "",
+            (d) => `Phone: ${d.data.phoneNumber}` || "Death",
             (d) => `${d.data.birthDate} - ${d.data.deathDate}` || "",
           ],
           mini_tree: treeProps.minified,
           hide_rels: false,
-          node_separation: 300,
-          level_separation: 150,
+          node_separation: 240,
+          level_separation: 120,
           card_dim: {
             w: 200,
             h: 65,

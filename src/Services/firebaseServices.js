@@ -46,34 +46,67 @@ const addDB = (data) => {
 
 const updateRel = (id, body) => {
   const { title, value } = body;
-  const titleRef = title.toLowerCase();
-  dbRef
-    .orderByChild("id")
-    .equalTo(id)
-    .on("value", (snapshot) => {
-      const data = snapshot.val();
-      const key = Object.keys(data)[0];
-      dbRef
-        .child(key)
-        .child("rels")
-        .update({ [titleRef]: value }, (error) => {
-          if (error) {
-            return (
-              <div class="ui warning message">
-                <i class="close icon"></i>
-                <div class="header">Fail to Add</div>
-              </div>
-            );
+  if (title.length > 2 && title !== "father" && title !== "mother") {
+    const titleRef = title.toLowerCase();
+    dbRef
+      .orderByChild("id")
+      .equalTo(id)
+      .once("value", (snapshot) => {
+        snapshot.forEach((datas) => {
+          if (datas.hasChild(`rels/${titleRef}`)) {
+            datas.forEach((items) => {
+              const oldData = items.child(titleRef);
+              oldData.ref.update([...oldData.val(), value[0]], (error) => {
+                if (error) {
+                  alert("Fail to Add");
+                } else {
+                  alert("Successfully Added!!");
+                }
+              });
+            });
           } else {
-            return (
-              <div class="ui info message">
-                <i class="close icon"></i>
-                <div class="header">Successfully Added!!</div>
-              </div>
-            );
+            datas.child("rels").ref.update({ [titleRef]: [value] });
           }
         });
-    });
+      });
+  } else {
+    if (title.length === 2) {
+      // login for adding parents data
+      const titleRef = "spouses";
+      dbRef
+        .orderByChild("id")
+        .equalTo(id)
+        .once("value", (snapshot) => {
+          snapshot.forEach((datas) => {
+            if (datas.hasChild(`rels/${titleRef}`)) {
+              datas.forEach((items) => {
+                const oldData = items.child(titleRef);
+                oldData.ref.update([...oldData.val(), value[0]], (error) => {
+                  if (error) {
+                    alert("Fail to Add");
+                  } else {
+                    alert("Successfully Added!!");
+                  }
+                });
+              });
+            } else {
+              datas.child("rels").ref.update({ [titleRef]: value });
+            }
+          });
+        });
+    } else {
+      // login for adding in own data as parents
+      const titleRef = title.toLowerCase();
+      dbRef
+        .orderByChild("id")
+        .equalTo(id)
+        .once("value", (snapshot) => {
+          snapshot.forEach((datas) => {
+            datas.child("rels").ref.update({ [titleRef]: value });
+          });
+        });
+    }
+  }
 };
 
 const updateData = (uid, body) => {
@@ -89,21 +122,9 @@ const updateData = (uid, body) => {
         .child("data")
         .update({ [title]: value }, (error) => {
           if (error) {
-            return (
-              <div class="ui warning message">
-                <i class="close icon"></i>
-                <div class="header">
-                  Not able to upload at this time. Try again!!!
-                </div>
-              </div>
-            );
+            alert("Not able to upload at this time. Try again!!!");
           } else {
-            return (
-              <div class="ui info message">
-                <i class="close icon"></i>
-                <div class="header">Successfully updated!!</div>
-              </div>
-            );
+            alert("Successfully updated!!!!");
           }
         });
     });

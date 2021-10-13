@@ -24,11 +24,31 @@ function LandingPage({ newUser }) {
   const [allFathers, setAllfathers] = useState([]);
   const [fatherSelection, setFatherSelection] = useState(null);
 
-  const LOGO_SIZE = "200px";
-  const DURATION = "0.7s";
-  const SHADOW_HEIGHT = `${Math.round(48 / 5)}px`;
-  const DROP_HEIGHT = "200px";
-  const OFFSET = "200px";
+  let LOGO_SIZE = "12rem";
+  let DURATION = "0.7s";
+  let SHADOW_HEIGHT = `${Math.round(48 / 5)}px`;
+  let DROP_HEIGHT = "60px";
+  let OFFSET = "12rem";
+
+  const windowSize = window.matchMedia("(max-width: 700px)");
+  const mediaQuery = (windowSize) => {
+    if (windowSize.matches) {
+      LOGO_SIZE = "8rem";
+      DURATION = "0.7s";
+      SHADOW_HEIGHT = `${Math.round(48 / 5)}px`;
+      DROP_HEIGHT = "40px";
+      OFFSET = "4rem";
+    } else {
+      console.log("big");
+      LOGO_SIZE = "12rem";
+      DURATION = "0.7s";
+      SHADOW_HEIGHT = `${Math.round(48 / 5)}px`;
+      DROP_HEIGHT = "60px";
+      OFFSET = "12rem";
+    }
+  };
+  windowSize.addListener(mediaQuery);
+  mediaQuery(windowSize);
 
   const bounce = keyframes`
   from {
@@ -177,7 +197,12 @@ function LandingPage({ newUser }) {
   const renderModal = () => {
     return (
       <Modal
-        onClose={() => setOpen(false)}
+        onClose={(e) => {
+          if (e) {
+            window.history.back();
+            setOpen(false);
+          }
+        }}
         onOpen={() => setOpen(true)}
         open={open}
         trigger={<Button>Show Modal</Button>}

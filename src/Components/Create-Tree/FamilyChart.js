@@ -7,8 +7,7 @@ const FamilyChart = (treeProps) => {
   const [ref, setRef] = useState();
   const [store, setStore] = useState();
   const [id, setId] = useState();
-  const [{ members }, dispatch] = useStateValue();
-  // const [nodeClicked, setNodeClicked] = useState(false);
+  const [{ members, uid, nodeId }, dispatch] = useStateValue();
 
   useEffect(() => {
     if (id) {
@@ -21,10 +20,12 @@ const FamilyChart = (treeProps) => {
         type: "NODE_ID",
         nodeId: null,
       });
+      dispatch({
+        type: "FB_KEY",
+        fbkey: null,
+      });
     }
   }, [id]);
-
-  console.log(f3);
 
   useEffect(() => {
     if (!ref) return;
@@ -42,7 +43,7 @@ const FamilyChart = (treeProps) => {
           node_separation: 240,
           level_separation: 120,
           card_dim: {
-            w: 200,
+            w: 225,
             h: 65,
             text_x: 65,
             text_y: 15,
@@ -75,7 +76,6 @@ const FamilyChart = (treeProps) => {
         const card = node.closest(".card");
         const id = card.getAttribute("data-id");
         setId(id);
-        // setNodeClicked(!nodeClicked);
       });
   }
 

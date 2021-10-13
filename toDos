@@ -11,11 +11,14 @@ CHeck why sideBar is rendering multiple times.---- Done
 design footer with @copyright. ---- Done
 First add Father, Mother, Spouses, Children, Brother, Sister. ---- Done
 Check why sidebar details info is not change after node change ---- Done
+Claim Father ---- Done
+Add Fathers father ---- Done
+firsttime modal outside click handler ---- Done
+Cheack and update serverices fbupdate query function from loginUserform ---- Done
+Check why addMember is not updating in current node user in firebase.---- Done
 
-
-Add Fathers father
-firsttime modal outside click handler
-Claim Father
+1. check to add in all child parent after adding parent by other child.
+2. check all adding and updating functions again.
 
 2. Check for firebase firestore security rules.
 Dynamic Events.

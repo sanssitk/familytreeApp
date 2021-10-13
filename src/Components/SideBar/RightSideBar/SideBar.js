@@ -19,6 +19,7 @@ export default React.memo(function SideBar() {
   const [saveActive, setSaveActive] = useState(false);
   const [address, setAddress] = useState();
   const [job, setJob] = useState();
+  const [dob, setDob] = useState();
   const [fbImageUrl, setFbImageUrl] = useState();
   const buttonLists = [
     "Spouses",
@@ -109,6 +110,9 @@ export default React.memo(function SideBar() {
     if (address) {
       dbServices.updateData(uid, address);
     }
+    if (dob) {
+      dbServices.updateData(uid, dob);
+    }
     if (fbImageUrl) {
       storageServices.add(uid, fbImageUrl, getImageUrl);
     }
@@ -117,17 +121,18 @@ export default React.memo(function SideBar() {
   };
 
   const handleSave = (target) => {
-    const title = target.title;
-    const value = target.value;
     const data = {
-      title: title,
-      value: value,
+      title: target.title,
+      value: target.value,
     };
     if (data.title === "address") {
       setAddress(data);
     }
     if (data.title === "jobDetails") {
       setJob(data);
+    }
+    if (data.title === "birthday") {
+      setDob(data);
     }
   };
 
@@ -186,24 +191,23 @@ export default React.memo(function SideBar() {
   //     id: uuidv4(),
   //     uid: "",
   //     rels: {
-  //       // spouses: ["4905b61f-5540-4840-831f-b95af66b4d3d"],
-  //       // children: [""],
-  //       // Goma Shrestha Katuwal
-  //       father: "b0efb939-bccb-413f-b2ee-4bd6a5d91161",
-  //       mother: "8aa2a9af-4b50-4c9c-b4b6-6043d094e81e",
+  //       children: ["158a98d5-1638-40c3-bbad-c1f6a4ed7cfa"],
+  //       // spouses: ["2a9bf502-6f80-4ab2-94b8-346f5309b934"],
+  //       // father: "c409171a-f3bc-4c36-afd9-0a7b898a2921",
+  //       // mother: "30b70feb-cee1-4891-93ad-65bf67047213",
   //     },
   //     data: {
-  //       birthday: "1922-07-17",
-  //       gender: "F",
-  //       firstName: "Goma Shrestha",
-  //       lastName: "Katuwal",
-  //       birthDate: "1922-07-17",
+  //       birthday: "1730-08-22",
+  //       gender: "M",
+  //       firstName: "Shiva Narayan",
+  //       lastName: "Shrestha",
+  //       birthDate: "22 Aug",
   //       image: "",
-  //       birthPlace: "Jhapa",
+  //       birthPlace: "Unknown",
   //       phoneNumber: "N/A",
   //       email: "N/A",
-  //       jobDetails: "house wife",
-  //       address: "Itahari",
+  //       jobDetails: "Death",
+  //       address: "Unknown",
   //     },
   //   };
   //   dbServices.addDB(newMember);

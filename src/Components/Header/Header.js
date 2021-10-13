@@ -111,7 +111,7 @@ const Header = ({ newMember }) => {
     }
   };
 
-  const handleOutClicke = (type) => {
+  const handleOutClick = (type) => {
     if (type) {
       window.history.back();
       setOpen(false);
@@ -122,7 +122,7 @@ const Header = ({ newMember }) => {
     return (
       <Dialog
         open={open}
-        onClose={handleOutClicke}
+        onClose={handleOutClick}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >

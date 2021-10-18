@@ -3,6 +3,7 @@ import "./routes.css";
 import EventCard from "../Components/EventsCom/EventCard";
 import { fireStore } from "../Services/firebaseServices";
 import { useStateValue } from "../StateManagement/StateProvider";
+import { NepaliDatePicker, BSDate } from "nepali-datepicker-react";
 import { v4 as uuidv4 } from "uuid";
 import {
   Container,
@@ -21,8 +22,9 @@ const Events = () => {
   let month = toDate.getMonth();
   let day = toDate.getDate();
   let dateString = `${day}/${month}/${year}`;
+  const now = new BSDate().now();
   const [open, setOpen] = useState(false);
-  const [dateSelected, setDateSelected] = useState(dateString);
+  const [dateSelected, setDateSelected] = useState(now);
   const [phNumber, setPhNumber] = useState();
   const [address, setAddress] = useState();
   const [eventInfo, setEventInfo] = useState();
@@ -75,7 +77,16 @@ const Events = () => {
         <Header icon="add" content="Add New Events" />
         <Modal.Content>
           <Form widths="equal">
-            <Form.Field
+            <label htmlFor="nepaliDate">
+              <strong>Date</strong>
+            </label>
+            <NepaliDatePicker
+              value={dateSelected}
+              format="YYYY-MM-DD"
+              id="nepaliDate"
+              onChange={(date) => setDateSelected(date)}
+            />
+            {/* <Form.Field
               control={Input}
               label="Date"
               placeholder=""
@@ -83,7 +94,7 @@ const Events = () => {
               required
               value={dateSelected}
               onChange={(e) => setDateSelected(e.target.value)}
-            />
+            /> */}
             <Form.Group widths="equal">
               <Form.Field
                 control={Input}

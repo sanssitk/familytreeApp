@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Card, Image } from "semantic-ui-react";
 import { firestore } from "../../Provider/firebase";
 import { fireStore } from "../../Services/firebaseServices";
+import { NepaliDatePicker } from "nepali-datepicker-react";
 import {
   Button,
   Icon,
@@ -20,6 +21,7 @@ const EventCard = ({ uid }) => {
   const [newaddress, setAddress] = useState();
   const [eventInfo, setEventInfo] = useState();
   const [activePost, setActivePost] = useState(false);
+  const [editData, setEditData] = useState();
 
   useEffect(() => {
     firestore
@@ -33,10 +35,6 @@ const EventCard = ({ uid }) => {
   const eachCardsample = (eventDetails, index) => {
     const { event, img, postBy, eventOn, dataUid, tel, address, id } =
       eventDetails;
-
-    const handlePostEdit = () => {
-      setOpen(true);
-    };
 
     const handleUpdatePost = () => {
       const callback = (res) => {
@@ -54,40 +52,64 @@ const EventCard = ({ uid }) => {
       const clickedId = e.currentTarget.parentNode.id;
       fireStore.removeFS(clickedId);
     };
+
+    const handlePostEdit = (e) => {
+      const clickedId = e.currentTarget.parentNode.id;
+      const updatePost = eventDatas.filter((posts) => posts.id === clickedId);
+      const editPost = Object.assign({}, ...updatePost);
+      setEditData(editPost);
+      setOpen(true);
+    };
+
     return open ? (
       <Modal
         key={index}
         closeIcon
         open={open}
-        onClose={() => setOpen(false)}
+        onClose={() => {
+          setOpen(false);
+          setEditData();
+        }}
         onOpen={() => setOpen(true)}
       >
         <Header icon="edit" content="Update Events" />
         <Modal.Content>
           <Form widths="equal">
-            <Form.Field
-              control={Input}
+            <label htmlFor="nepaliDate">
+              <strong>Date</strong>
+            </label>
+            <NepaliDatePicker
+              value={dateSelected ? dateSelected : editData.eventOn}
+              format="YYYY-MM-DD"
+              id="nepaliDate"
+              onChange={(e) => {
+                setDateSelected(e);
+                setActivePost(true);
+              }}
+            />
+            {/* <Form.Field
+              control={NepaliDatePicker}
               label="Date"
-              placeholder={eventOn}
+              placeholder={editData.eventOn}
               type="date"
               required
-              value={dateSelected ? dateSelected : eventOn}
+              value={dateSelected ? dateSelected : editData.eventOn}
               onChange={(e) => {
                 setDateSelected(e.target.value);
                 setActivePost(true);
               }}
-            />
+            /> */}
             <Form.Group widths="equal">
               <Form.Field
                 control={Input}
                 label="Phone Number"
-                placeholder={tel}
+                placeholder={editData.tel}
                 required
                 type="number"
                 min="1000000000"
                 max="9999999999"
                 maxlenght="10"
-                value={phNumber ? phNumber : tel}
+                value={phNumber ? phNumber : editData.tel}
                 onChange={(e) => {
                   setPhNumber(e.target.value);
                   setActivePost(true);
@@ -96,9 +118,9 @@ const EventCard = ({ uid }) => {
               <Form.Field
                 control={Input}
                 label="Address"
-                placeholder={address}
+                placeholder={editData.address}
                 required
-                value={newaddress ? newaddress : address}
+                value={newaddress ? newaddress : editData.address}
                 onChange={(e) => {
                   setAddress(e.target.value);
                   setActivePost(true);
@@ -108,9 +130,9 @@ const EventCard = ({ uid }) => {
             <Form.Field
               control={TextArea}
               label="Event Details"
-              placeholder={event}
+              placeholder={editData.event}
               required
-              value={eventInfo ? eventInfo : event}
+              value={eventInfo ? eventInfo : editData.event}
               onChange={(e) => {
                 setEventInfo(e.target.value);
                 setActivePost(true);

@@ -75,6 +75,14 @@
     margin-left: 18px;
 }
 
+.ui.icon.header {
+    flex-direction: column;
+}
+
+.ui.small.basic.modal.transition.visible.active > .actions {
+    text-align: center;
+}
+
 .ui.fluid.input.disabled.transparent.detailtext {
     opacity: 1;
 }

@@ -10,7 +10,7 @@ import Home from "./Components/Home/Home";
 import Events from "./Routes/Events";
 import Rules from "./Routes/Rules";
 import AddMember from "./Routes/AddMember";
-import Footer from "./Components/Footer/Footer"
+import Footer from "./Components/Footer/Footer";
 
 const App = () => {
   const [{ user, uid, member }, dispatch] = useStateValue();
@@ -63,10 +63,10 @@ const App = () => {
             <AddMember />
           </Route>
           <Route path="/events" exact>
-            <Events />
+            {user && <Events />}
           </Route>
           <Route path="/rules" exact>
-            <Rules />
+            {user && <Rules />}
           </Route>
           <Route path="/form" exact>
             <LoginUserForm />

@@ -1,4 +1,4 @@
-import db, { storage } from "../Provider/firebase";
+import db, { storage, firestore } from "../Provider/firebase";
 
 const dbRef = db.ref("relatives");
 
@@ -48,6 +48,7 @@ const updateRel = (id, body) => {
   const { title, value } = body;
   if (title.length > 2 && title !== "father" && title !== "mother") {
     const titleRef = title.toLowerCase();
+
     dbRef
       .orderByChild("id")
       .equalTo(id)
@@ -55,14 +56,16 @@ const updateRel = (id, body) => {
         snapshot.forEach((datas) => {
           if (datas.hasChild(`rels/${titleRef}`)) {
             datas.forEach((items) => {
-              const oldData = items.child(titleRef);
-              oldData.ref.update([...oldData.val(), value[0]], (error) => {
-                if (error) {
-                  alert("Fail to Add");
-                } else {
-                  alert("Successfully Added!!");
-                }
-              });
+              if (items.key === "rels") {
+                const oldData = items.child(titleRef);
+                oldData.ref.update([...oldData.val(), value[0]], (error) => {
+                  if (error) {
+                    alert("Fail to Add");
+                  } else {
+                    alert("Successfully Added!!");
+                  }
+                });
+              }
             });
           } else {
             datas.child("rels").ref.update({ [titleRef]: [value] });
@@ -176,4 +179,26 @@ export const storageServices = {
   add,
   getUrl,
   delete: _delete,
+};
+
+const removeFS = (id) => {
+  firestore.collection("events").doc(id).delete();
+};
+const addFS = (data, id) => {
+  firestore.collection("events").doc(id).set(data);
+};
+const readFS = () => {
+  firestore.collection("events");
+};
+const updateFs = (id, field, data, callback) => {
+  const ref = firestore.collection("events").doc(id);
+  ref.update({ [field]: data }).then(() => {
+    callback(true);
+  });
+};
+export const fireStore = {
+  readFS,
+  addFS,
+  removeFS,
+  updateFs,
 };

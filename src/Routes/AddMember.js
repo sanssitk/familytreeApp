@@ -93,6 +93,10 @@ const AddMember = () => {
           spouses: [`${nodeId}`],
         };
       } else {
+        dbServices.updateRel(uid, {
+          title: "spouses",
+          value: [memberId],
+        });
         return { spouses: [`${nodeId}`] };
       }
     }

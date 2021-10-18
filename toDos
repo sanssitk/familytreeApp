@@ -16,10 +16,14 @@ Add Fathers father ---- Done
 firsttime modal outside click handler ---- Done
 Cheack and update serverices fbupdate query function from loginUserform ---- Done
 Check why addMember is not updating in current node user in firebase.---- Done
+1. check to add in all child parent after adding parent by other child.---- Done
+Check when adding second mother rules ( first if child has mother or not ? ---- Done
+if no, then allow to add or if yes do not add)---- Done
+Overall check mother already added or not? only father can add second wife ---- Done
+check all adding and updating functions again. ---- Done
 
-1. check to add in all child parent after adding parent by other child.
-2. check all adding and updating functions again.
 
-2. Check for firebase firestore security rules.
+1. post to firebase store.
+
 Dynamic Events.
 Static Rules.

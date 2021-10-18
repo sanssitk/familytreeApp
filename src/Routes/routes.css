@@ -1,6 +1,15 @@
-.eventsBody,
-.rulesbody {
-    height: 100vh;
-    color: white;
-    font-size: 5rem;
+.ui.container {
+    width: 70%;
+    height: 100%;
+    min-height: calc(100vh - 200px);
+}
+
+.ui.centered.cards {
+    justify-content: unset;
+    margin-top: 12px;
+}
+
+.content>.ui.equal.width.form {
+    padding: unset;
+    min-width: 90%;
 }

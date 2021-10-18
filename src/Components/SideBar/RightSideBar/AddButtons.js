@@ -28,18 +28,38 @@ const AddButtons = ({ buttonlist }) => {
     }
     if (open) setOpen(false);
   };
+  const checkMother = (relations) => {
+    if (!relations.rels.mother) {
+      dispatch({
+        type: "ADD_MEMBER",
+        member: buttonlist,
+      });
+      history.push(`/add${buttonlist}`);
+    } else if (relations.rels.mother == "") {
+      dispatch({
+        type: "ADD_MEMBER",
+        member: buttonlist,
+      });
+      history.push(`/add${buttonlist}`);
+    } else {
+      setOpen(true);
+    }
+    if (open) setOpen(false);
+  };
 
   const handleAddButtonClicked = (e) => {
     e.preventDefault();
     const currentButton = e.currentTarget.id;
-    if (currentButton !== "Father") {
+    if (currentButton !== "Father" && currentButton !== "Mother") {
       dispatch({
         type: "ADD_MEMBER",
         member: e.currentTarget.id,
       });
       history.push(`/add${e.currentTarget.id}`);
-    } else {
+    } else if (currentButton === "Father") {
       dbServices.readDB(uid, checkFather);
+    } else {
+      dbServices.readDB(uid, checkMother);
     }
   };
 
@@ -54,7 +74,7 @@ const AddButtons = ({ buttonlist }) => {
       >
         <Header icon>
           <Icon name="user" />
-          Father Already Added
+          Parent Already Added
         </Header>
         <Modal.Actions>
           <Button basic color="red" inverted onClick={() => setOpen(false)}>

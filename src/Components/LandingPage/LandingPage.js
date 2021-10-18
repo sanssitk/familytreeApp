@@ -39,7 +39,6 @@ function LandingPage({ newUser }) {
       DROP_HEIGHT = "40px";
       OFFSET = "4rem";
     } else {
-      console.log("big");
       LOGO_SIZE = "12rem";
       DURATION = "0.7s";
       SHADOW_HEIGHT = `${Math.round(48 / 5)}px`;

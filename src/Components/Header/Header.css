@@ -88,12 +88,14 @@
     display: none;
 }
 
+
 @media screen and (max-width: 500px) {
 
     .app>.header {
         flex-direction: column;
         padding: 26px;
         align-items: flex-start;
+        position: unset;
     }
 
     .navList {
@@ -118,6 +120,10 @@
         right: 8vw;
     }
 
+    .mobileButton>svg {
+        transition: all 0.5s ease-in;
+    }
+
     .mobileMenu {
         position: absolute;
         display: flex;
@@ -134,6 +140,7 @@
     }
 
     .mobileMenu>a {
+        z-index: 10;
         text-align: center;
         font-size: 2rem;
         color: #fff;

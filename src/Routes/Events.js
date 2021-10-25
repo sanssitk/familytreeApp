@@ -18,10 +18,10 @@ import {
 
 const Events = () => {
   const toDate = new Date();
-  let year = toDate.getFullYear();
-  let month = toDate.getMonth();
-  let day = toDate.getDate();
-  let dateString = `${day}/${month}/${year}`;
+  // let year = toDate.getFullYear();
+  // let month = toDate.getMonth();
+  // let day = toDate.getDate();
+  // let dateString = `${day}/${month}/${year}`;
   const now = new BSDate().now();
   const [open, setOpen] = useState(false);
   const [dateSelected, setDateSelected] = useState(now);
